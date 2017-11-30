@@ -26,13 +26,15 @@
             android:gravity="center"
             android:text="血压值"
             android:textColor="@color/text_green"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="invisible"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <com.bupt.heartarea.ui.NumberAnimTextView
                 android:id="@+id/animtv_blood_presssure_low"

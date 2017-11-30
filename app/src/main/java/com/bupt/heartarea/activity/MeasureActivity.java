@@ -671,16 +671,16 @@ public class MeasureActivity extends Activity {
 
                     //---------------------------------------------------------
                     // 1. 用于用户使用
-                    postToServer(MeasureActivity.this);
+//                    postToServer(MeasureActivity.this);
 
 
                     // 2. 用于收集数据使用
-//                    Intent intent = new Intent(MeasureActivity.this, SaveDataActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("measure_data", mMeasureData);
-//                    intent.putExtras(bundle);
-//                    startActivity(intent);
-//                    finish();
+                    Intent intent = new Intent(MeasureActivity.this, SaveDataActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("measure_data", mMeasureData);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
                     //-----------------------------------------------------------
 
 
