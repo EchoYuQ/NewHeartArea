@@ -2,6 +2,7 @@ package com.bupt.heartarea.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -10,9 +11,6 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 
 import com.bupt.heartarea.R;
-
-//import butterknife.ButterKnife;
-//import butterknife.InjectView;
 
 public class WebActivity extends Activity {
 
@@ -24,8 +22,8 @@ public class WebActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_web);
-        webView= (WebView) findViewById(R.id.webView);
-        mIvBack= (ImageView) findViewById(R.id.id_iv_back_news);
+        webView = (WebView) findViewById(R.id.webView);
+        mIvBack = (ImageView) findViewById(R.id.id_iv_back_news);
 
         mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +35,15 @@ public class WebActivity extends Activity {
         String url = getIntent().getStringExtra("url");
         WebSettings webSettings = webView.getSettings();
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        webView.loadUrl(url);
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        // 加载HTML字符串进行显示
+        if (url != null) {
+//            webView.loadDataWithBaseURL(url, "", "text/html", "utf-8", null);
+//            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            Log.e("loadUrl", url);
+            webView.loadUrl(url);
+        }
         webView.setOnKeyListener(new View.OnKeyListener() { // webview can
             // go back
             @Override

@@ -27,23 +27,22 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bupt.heartarea.R;
+import com.bupt.heartarea.activity.MainActivity;
 import com.bupt.heartarea.activity.WebActivity;
+import com.bupt.heartarea.adapter.GuidePageAdapter;
 import com.bupt.heartarea.bean.ResponseBean;
-import com.bupt.heartarea.bean.Result;
+import com.bupt.heartarea.bean.Result2;
 import com.bupt.heartarea.ui.AlphaIndicator;
 import com.bupt.heartarea.utils.GlobalData;
 import com.bupt.heartarea.utils.TimeUtil;
 import com.google.gson.Gson;
-import com.bupt.heartarea.R;
-import com.bupt.heartarea.activity.MainActivity;
-import com.bupt.heartarea.adapter.GuidePageAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,17 +64,11 @@ import cn.aigestudio.datepicker.views.DatePicker2;
 
 
 public class MainPageFragment extends Fragment implements OnClickListener {
-    private static final String URL_NEWS = "http://www.tngou.net/api/info/list?rows=3";
-    private static final String URL_DETAILS = "http://www.tngou.net/info/show/";
-    private static final String URL_GETSIGNEDDATE = GlobalData.URL_HEAD + ":8080/detect3/SignInMonth";
-    private static final String URL_POSTSIGNEDDATE = GlobalData.URL_HEAD + ":8080/detect3/SignIn";
+    private static final String URL_GETSIGNEDDATE = GlobalData.URL_HEAD+":8080/detect3/SignInMonth";
+    private static final String URL_POSTSIGNEDDATE = GlobalData.URL_HEAD+":8080/detect3/SignIn";
     private View view;
     // 广告
     private ViewPager viewPager;
-
-
-    // 搜索
-//    private ImageView mImgSearch;
 
     // 广告数组
     private List<View> ar;
@@ -98,7 +91,7 @@ public class MainPageFragment extends Fragment implements OnClickListener {
 //    private TimerTask task;
     AlphaIndicator alphaIndicator;
     private RequestQueue mQueue;
-    private List<Result.DataBean> dataBeanList1;
+    private List<Result2.NewsBean> newsBeanList;
 
     private LinearLayout mLlNews1, mLlNews2, mLlNews3;
     private LinearLayout mLlDuxin;
@@ -332,8 +325,7 @@ public class MainPageFragment extends Fragment implements OnClickListener {
         // 判断今日是否签到过
         if (mSignedDateList != null) {
             int length = mSignedDateList.size();
-            if (length > 0)
-            {
+            if (length > 0) {
                 String last = mSignedDateList.get(length - 1);
                 if (last.equals(mYear + "-" + mMonth + "-" + mDay)) {
                     mIsSigned = true;
@@ -436,69 +428,82 @@ public class MainPageFragment extends Fragment implements OnClickListener {
     }
 
     private void getNewsFromServer() {
-        mQueue = Volley.newRequestQueue(getActivity());
 
-        StringRequest stringRequest = new StringRequest(URL_NEWS, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("TAG 请求成功", response);
-//                updateUi(response);
-                Gson gson = new Gson();
-                Result result = gson.fromJson(response, Result.class);
-                dataBeanList1 = result.getTngou();
-                for (int i = 0; i < dataBeanList1.size(); i++) {
 
-                    System.out.println(dataBeanList1.get(i).toString());
-                }
+//        mQueue = Volley.newRequestQueue(getActivity());
+//
+//        StringRequest stringRequest = new StringRequest(URL_NEWS, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d("TAG 请求成功", response);
+////                updateUi(response);
+//                Gson gson = new Gson();
+//                Result result = gson.fromJson(response, Result.class);
+//
+//
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                Log.d("TAG 请求失败", volleyError.getAuthor_name() + "");
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                //在这里设置需要post的参数
+//                Map<String, String> map = new HashMap<String, String>();
+//                return map;
+//            }
+//        };
+//        mQueue.add(stringRequest);
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTvNews1.setText(dataBeanList1.get(0).getTitle());
-                        mTvNews2.setText(dataBeanList1.get(1).getTitle());
-                        mTvNews3.setText(dataBeanList1.get(2).getTitle());
-                    }
-                });
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.d("TAG 请求失败", volleyError.getMessage());
-            }
+        newsBeanList = new ArrayList<>(GlobalData.result.getData());
+        for (int i = 0; i < newsBeanList.size(); i++) {
+
+            System.out.println(newsBeanList.get(i).toString());
         }
 
-
-        );
-        mQueue.add(stringRequest);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvNews1.setText(newsBeanList.get(0).getTitle());
+                mTvNews2.setText(newsBeanList.get(1).getTitle());
+                mTvNews3.setText(newsBeanList.get(2).getTitle());
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.id_ll_news1:
-                mId = dataBeanList1.get(0).getId();
-                break;
-            case R.id.id_ll_news2:
-                mId = dataBeanList1.get(1).getId();
+        if (newsBeanList != null && newsBeanList.size() >= 3) {
+            int index = -1;
+            switch (v.getId()) {
+                case R.id.id_ll_news1:
+                    index = 0;
+                    break;
+                case R.id.id_ll_news2:
+                    index = 1;
+                    break;
+                case R.id.id_ll_news3:
+                    index = 2;
+                    break;
 
-                break;
-            case R.id.id_ll_news3:
-                mId = dataBeanList1.get(2).getId();
-                break;
-
+            }
+            String url = newsBeanList.get(index).getUrl();
+            Intent intent = new Intent(getActivity(), WebActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("url", url);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
-        String url = URL_DETAILS + mId;
-        Intent intent = new Intent(getActivity(), WebActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("url", url);
-        intent.putExtras(bundle);
-        startActivity(intent);
     }
 
 
     /**
      * 向服务器请求用户的签到日期
+     *
      */
     private void getSignedDateAndShowSignDialog() {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
@@ -521,7 +526,8 @@ public class MainPageFragment extends Fragment implements OnClickListener {
                                     if (jsonObject.has("signed_date")) {
                                         String str = jsonObject.getString("signed_date").trim();
                                         mSignedDateList.clear();
-                                        if (!str.isEmpty()) {
+                                        if(str!=null&&!str.equals(""))
+                                        {
                                             String[] date_array = str.split(",");
                                             for (int i = 0; i < date_array.length; i++) {
 
@@ -583,6 +589,7 @@ public class MainPageFragment extends Fragment implements OnClickListener {
 
     /**
      * 向服务器发送用户本次签到请求
+     *
      */
     private void setSignedDateToServer(final DatePicker2 picker) {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());

@@ -15,18 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 import com.bupt.heartarea.R;
 import com.bupt.heartarea.activity.WebActivity;
 import com.bupt.heartarea.adapter.NewsRecyclerViewAdapter;
-import com.bupt.heartarea.bean.Result;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.bupt.heartarea.bean.Result2;
+import com.bupt.heartarea.utils.GlobalData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +38,9 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     ProgressBar pb;
     private LinearLayoutManager mLinearLayoutManager;
     private Context mContext;
-    private static final String URL_LIST = "http://www.tngou.net/api/lore/list";
-    private static final String URL_SHOW = "http://www.tngou.net/api/lore/show";
 
-    //    List<HttpService.Result.TngouBean> dataBeanList = new ArrayList<>();
-    private List<Result.DataBean> dataBeanList1 = new ArrayList<>();
+    private List<Result2.NewsBean> newsBeanList = new ArrayList<>();
     private RequestQueue mQueue;
-//    List<HttpService.Result1.TngouBean.DataBean> dataBeanList1=new ArrayList<>();
 
     public static NewsFragment newInstance(String type) {
         NewsFragment newsFragment = new NewsFragment();
@@ -65,68 +54,57 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        newsBeanList = new ArrayList<>(GlobalData.result.getData());
         mContext = getActivity();
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_news, container, false);
         }
         rv = (RecyclerView) view.findViewById(R.id.rv);
         fresh = (SwipeRefreshLayout) view.findViewById(R.id.fresh);
-//        ButterKnife.inject(this, view);
         fresh.setColorSchemeResources(R.color.main, android.R.color.holo_orange_light, android.R.color.holo_red_light, android.R.color.holo_green_light);
         fresh.setOnRefreshListener(this);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         Bundle bundle = getArguments();
-//        type = bundle.getString("type");
-//        getData(type);
-        getData();
+        updateUi();
         Log.i(type, "onCreateView");
-
-
         return view;
     }
 
 
-    private void getData() {
-        mQueue = Volley.newRequestQueue(mContext);
-
-        StringRequest stringRequest = new StringRequest(URL_LIST, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("TAG 请求成功", response);
-                updateUi(response);
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.d("TAG 请求失败", volleyError.getMessage());
-            }
-        }
-
-
-        );
-        mQueue.add(stringRequest);
-    }
+//    private void getData() {
+//        mQueue = Volley.newRequestQueue(mContext);
+//
+//        StringRequest stringRequest = new StringRequest(URL_LIST, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d("TAG 请求成功", response);
+//
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                Log.d("TAG 请求失败", volleyError.getAuthor_name() + "");
+//            }
+//        }
+//
+//
+//        );
+//        mQueue.add(stringRequest);
+//    }
 
 
     /**
      * 更新数据
-     * @param response
      */
-    private void updateUi(String response) {
+    private void updateUi() {
         if (fresh != null) {
             fresh.setRefreshing(false);
         }
-        Gson gson = new Gson();
-        Result result = gson.fromJson(response, Result.class);
-//        if (result.getError_code() == 0) {
+        newsBeanList = GlobalData.result.getData();
+        for (int i = 0; i < newsBeanList.size(); i++) {
 
-//            Log.e("HttpService.Result",result.getResult().toString());
-        dataBeanList1 = result.getTngou();
-        for (int i = 0; i < dataBeanList1.size(); i++) {
-
-            System.out.println(dataBeanList1.get(i).toString());
+            System.out.println(newsBeanList.get(i).toString());
         }
         if (adapter == null) {
             footView = LayoutInflater.from(getActivity()).inflate(R.layout.item_footview, null);
@@ -134,41 +112,47 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             tv = (TextView) footView.findViewById(R.id.tv);
             pb = (ProgressBar) footView.findViewById(R.id.pb);
 
-
-            adapter = new NewsRecyclerViewAdapter(getActivity(), dataBeanList1, footView);
+            adapter = new NewsRecyclerViewAdapter(getActivity(), newsBeanList, footView);
             adapter.setOnItemClickLitener(new NewsRecyclerViewAdapter.OnItemClickLitener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    int id = dataBeanList1.get(position).getId();
-                    String url = URL_SHOW + "?id=" + id;
-                    StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            JSONObject jsonObject;
-                            try {
-                                jsonObject = new JSONObject(response);
-                                if (jsonObject.has("url")) {
-                                    String web_url = jsonObject.getString("url");
-                                    Intent intent = new Intent(getActivity(), WebActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("url", web_url);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+//                    int id = newsBeanList.get(position).getId();
+//                    String url = URL_SHOW + "?id=" + id;
+//                    StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//                            JSONObject jsonObject;
+//                            try {
+//                                jsonObject = new JSONObject(response);
+//                                if (jsonObject.has("url")) {
+//                                    String web_url = jsonObject.getString("url");
+//                                    Intent intent = new Intent(getActivity(), WebActivity.class);
+//                                    Bundle bundle = new Bundle();
+//                                    bundle.putString("url", web_url);
+//                                    intent.putExtras(bundle);
+//                                    startActivity(intent);
+//                                }
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//
+//                        }
+//                    }, new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError volleyError) {
+//
+//                        }
+//                    });
+//                    mQueue.add(stringRequest);
 
 
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-
-                        }
-                    });
-                    mQueue.add(stringRequest);
-
+                    String url = newsBeanList.get(position).getUrl();
+                    Intent intent = new Intent(getActivity(), WebActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", url);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
 
                 }
             });
@@ -194,7 +178,6 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                     }
 
-
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
@@ -209,7 +192,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
 
         } else {
-            adapter.setList(dataBeanList1);
+            adapter.setList(newsBeanList);
         }
 
 
@@ -235,6 +218,6 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
-        getData();
+        updateUi();
     }
 }

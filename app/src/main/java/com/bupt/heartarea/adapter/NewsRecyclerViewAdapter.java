@@ -10,10 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bupt.heartarea.R;
-import com.bupt.heartarea.bean.Result;
+import com.bupt.heartarea.bean.Result2;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -23,7 +21,7 @@ import java.util.List;
 public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     LayoutInflater inflaters;
     Context context;
-    List<Result.DataBean> list;
+    List<Result2.NewsBean> list;
     private OnItemClickLitener mOnItemClickLitener;
     private OnLoadListener mOnLoadListener;
     private boolean isFooterView = true;
@@ -33,14 +31,14 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private static final String img_head = "http://tnfs.tngou.net/img";
 
-    public NewsRecyclerViewAdapter(Context context, List<Result.DataBean> list) {
+    public NewsRecyclerViewAdapter(Context context, List<Result2.NewsBean> list) {
         isFooterView = false;
         inflaters = LayoutInflater.from(context);
         this.list = list;
         this.context = context;
     }
 
-    public NewsRecyclerViewAdapter(Context context, List<Result.DataBean> list, View footView) {
+    public NewsRecyclerViewAdapter(Context context, List<Result2.NewsBean> list, View footView) {
         isFooterView = true;
         inflaters = LayoutInflater.from(context);
         this.list = list;
@@ -49,7 +47,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
 
-    public void setList(List<Result.DataBean> list) {
+    public void setList(List<Result2.NewsBean> list) {
 
         this.list = list;
         notifyDataSetChanged();
@@ -59,9 +57,9 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         return this.list.size();
     }
 
-    public void addList(List<Result.DataBean> lists) {
-        if (lists.size() > 0) {
-            for (Result.DataBean dataBean : lists) {
+    public void addList(List<Result2.NewsBean> list) {
+        if (list.size() > 0) {
+            for (Result2.NewsBean dataBean : list) {
                 this.list.add(dataBean);
             }
             notifyDataSetChanged();
@@ -122,14 +120,13 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             MyHolder holder1 = (MyHolder) holder;
 
             holder1.setTitle(list.get(position).getTitle());
-            long time = list.get(position).getTime();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date(time);
-            String time_str = dateFormat.format(date);
-
+//            long time = list.get(position).getTime();
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            Date date = new Date(time);
+//            String time_str = dateFormat.format(date);
+            String time_str = list.get(position).getDate();
             holder1.setDate(time_str);
-
-            holder1.setImg(img_head + list.get(position).getImg());
+            holder1.setImg(list.get(position).getThumbnail_pic_s());
             if (mOnItemClickLitener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
