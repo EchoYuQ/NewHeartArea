@@ -36,7 +36,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bupt.heartarea.activity.WebActivity;
 import com.bupt.heartarea.bean.ResponseBean;
-import com.bupt.heartarea.bean.Result;
+import com.bupt.heartarea.bean.Result2;
 import com.bupt.heartarea.ui.AlphaIndicator;
 import com.bupt.heartarea.utils.GlobalData;
 import com.bupt.heartarea.utils.TimeUtil;
@@ -65,17 +65,11 @@ import cn.aigestudio.datepicker.views.DatePicker2;
 
 
 public class MainPageFragment extends Fragment implements OnClickListener {
-    private static final String URL_NEWS = "http://www.tngou.net/api/info/list?rows=3";
-    private static final String URL_DETAILS = "http://www.tngou.net/info/show/";
     private static final String URL_GETSIGNEDDATE = GlobalData.URL_HEAD+":8080/detect3/SignInMonth";
     private static final String URL_POSTSIGNEDDATE = GlobalData.URL_HEAD+":8080/detect3/SignIn";
     private View view;
     // 广告
     private ViewPager viewPager;
-
-
-    // 搜索
-//    private ImageView mImgSearch;
 
     // 广告数组
     private List<View> ar;
@@ -98,7 +92,7 @@ public class MainPageFragment extends Fragment implements OnClickListener {
 //    private TimerTask task;
     AlphaIndicator alphaIndicator;
     private RequestQueue mQueue;
-    private List<Result.DataBean> dataBeanList1;
+    private List<Result2.NewsBean> newsBeanList;
 
     private LinearLayout mLlNews1, mLlNews2, mLlNews3;
     private LinearLayout mLlDuxin;
@@ -141,7 +135,7 @@ public class MainPageFragment extends Fragment implements OnClickListener {
         // 加事件
         initEvent();
         // 从服务器中获取新闻数据
-//        getNewsFromServer();
+        getNewsFromServer();
         return view;
     }
 
@@ -453,7 +447,7 @@ public class MainPageFragment extends Fragment implements OnClickListener {
 //        }, new Response.ErrorListener() {
 //            @Override
 //            public void onErrorResponse(VolleyError volleyError) {
-//                Log.d("TAG 请求失败", volleyError.getMessage() + "");
+//                Log.d("TAG 请求失败", volleyError.getAuthor_name() + "");
 //            }
 //        }) {
 //            @Override
@@ -466,25 +460,25 @@ public class MainPageFragment extends Fragment implements OnClickListener {
 //        mQueue.add(stringRequest);
 
 
-        dataBeanList1 = new ArrayList<>(GlobalData.result.getData());
-        for (int i = 0; i < dataBeanList1.size(); i++) {
+        newsBeanList = new ArrayList<>(GlobalData.result.getData());
+        for (int i = 0; i < newsBeanList.size(); i++) {
 
-            System.out.println(dataBeanList1.get(i).toString());
+            System.out.println(newsBeanList.get(i).toString());
         }
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mTvNews1.setText(dataBeanList1.get(0).getTitle());
-                mTvNews2.setText(dataBeanList1.get(1).getTitle());
-                mTvNews3.setText(dataBeanList1.get(2).getTitle());
+                mTvNews1.setText(newsBeanList.get(0).getTitle());
+                mTvNews2.setText(newsBeanList.get(1).getTitle());
+                mTvNews3.setText(newsBeanList.get(2).getTitle());
             }
         });
     }
 
     @Override
     public void onClick(View v) {
-        if (dataBeanList1 != null && dataBeanList1.size() >= 3) {
+        if (newsBeanList != null && newsBeanList.size() >= 3) {
             int index = -1;
             switch (v.getId()) {
                 case R.id.id_ll_news1:
@@ -498,10 +492,10 @@ public class MainPageFragment extends Fragment implements OnClickListener {
                     break;
 
             }
-            String message = dataBeanList1.get(index).getMessage();
+            String url = newsBeanList.get(index).getUrl();
             Intent intent = new Intent(getActivity(), WebActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("message", message);
+            bundle.putString("url", url);
             intent.putExtras(bundle);
             startActivity(intent);
         }

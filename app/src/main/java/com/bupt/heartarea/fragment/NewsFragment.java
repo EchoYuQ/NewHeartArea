@@ -15,19 +15,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.bupt.heartarea.utils.GlobalData;
-import com.google.gson.Gson;
 import com.bupt.heartarea.R;
 import com.bupt.heartarea.activity.WebActivity;
 import com.bupt.heartarea.adapter.NewsRecyclerViewAdapter;
 import com.bupt.heartarea.bean.Result;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.bupt.heartarea.bean.Result2;
+import com.bupt.heartarea.utils.GlobalData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +39,8 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     ProgressBar pb;
     private LinearLayoutManager mLinearLayoutManager;
     private Context mContext;
-    private static final String URL_LIST = "http://www.tngou.net/api/lore/list";
-    private static final String URL_SHOW = "http://www.tngou.net/api/lore/show";
 
-    //    List<HttpService.Result.TngouBean> dataBeanList = new ArrayList<>();
-    private List<Result.DataBean> dataBeanList1 = new ArrayList<>();
+    private List<Result2.NewsBean> newsBeanList = new ArrayList<>();
     private RequestQueue mQueue;
 
     public static NewsFragment newInstance(String type) {
@@ -65,7 +55,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        dataBeanList1 = new ArrayList<>(GlobalData.result.getData());
+        newsBeanList = new ArrayList<>(GlobalData.result.getData());
         mContext = getActivity();
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_news, container, false);
@@ -95,7 +85,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 //        }, new Response.ErrorListener() {
 //            @Override
 //            public void onErrorResponse(VolleyError volleyError) {
-//                Log.d("TAG 请求失败", volleyError.getMessage() + "");
+//                Log.d("TAG 请求失败", volleyError.getAuthor_name() + "");
 //            }
 //        }
 //
@@ -112,10 +102,10 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if (fresh != null) {
             fresh.setRefreshing(false);
         }
-//        dataBeanList1 = GlobalData.result.getData();
-        for (int i = 0; i < dataBeanList1.size(); i++) {
+        newsBeanList = GlobalData.result.getData();
+        for (int i = 0; i < newsBeanList.size(); i++) {
 
-            System.out.println(dataBeanList1.get(i).toString());
+            System.out.println(newsBeanList.get(i).toString());
         }
         if (adapter == null) {
             footView = LayoutInflater.from(getActivity()).inflate(R.layout.item_footview, null);
@@ -123,11 +113,11 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             tv = (TextView) footView.findViewById(R.id.tv);
             pb = (ProgressBar) footView.findViewById(R.id.pb);
 
-            adapter = new NewsRecyclerViewAdapter(getActivity(), dataBeanList1, footView);
+            adapter = new NewsRecyclerViewAdapter(getActivity(), newsBeanList, footView);
             adapter.setOnItemClickLitener(new NewsRecyclerViewAdapter.OnItemClickLitener() {
                 @Override
                 public void onItemClick(View view, int position) {
-//                    int id = dataBeanList1.get(position).getId();
+//                    int id = newsBeanList.get(position).getId();
 //                    String url = URL_SHOW + "?id=" + id;
 //                    StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
 //                        @Override
@@ -158,10 +148,10 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 //                    mQueue.add(stringRequest);
 
 
-                    String message = dataBeanList1.get(position).getMessage();
+                    String url = newsBeanList.get(position).getUrl();
                     Intent intent = new Intent(getActivity(), WebActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("message", message);
+                    bundle.putString("url", url);
                     intent.putExtras(bundle);
                     startActivity(intent);
 
@@ -203,7 +193,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
 
         } else {
-            adapter.setList(dataBeanList1);
+            adapter.setList(newsBeanList);
         }
 
 

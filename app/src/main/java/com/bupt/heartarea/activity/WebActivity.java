@@ -2,6 +2,7 @@ package com.bupt.heartarea.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -31,19 +32,18 @@ public class WebActivity extends Activity {
             }
         });
 
-        String message = getIntent().getStringExtra("message");
+        String url = getIntent().getStringExtra("url");
         WebSettings webSettings = webView.getSettings();
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
         webView.getSettings().setJavaScriptEnabled(true);
         // 加载HTML字符串进行显示
-        if (message != null) {
-            webView.loadDataWithBaseURL(null, message, "text/html", "utf-8", null);
-            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        if (url != null) {
+//            webView.loadDataWithBaseURL(url, "", "text/html", "utf-8", null);
+//            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            Log.e("loadUrl", url);
+            webView.loadUrl(url);
         }
-
-
-//        webView.loadUrl(message);
         webView.setOnKeyListener(new View.OnKeyListener() { // webview can
             // go back
             @Override

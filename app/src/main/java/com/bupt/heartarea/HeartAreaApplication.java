@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bupt.heartarea.bean.Result;
+import com.bupt.heartarea.bean.Result2;
 import com.bupt.heartarea.utils.Constants;
 import com.bupt.heartarea.utils.GlobalData;
 import com.google.gson.Gson;
@@ -43,9 +44,9 @@ public class HeartAreaApplication extends Application {
                         try {
                             JSONObject resultObject = jsonObject.getJSONObject("result");
                             Gson gson = new Gson();
-                            Result result = gson.fromJson(resultObject.toString(), Result.class);
+                            Result2 result = gson.fromJson(resultObject.toString(), Result2.class);
                             GlobalData.result = result;
-                            for (Result.DataBean dataBean : result.getData()) {
+                            for (Result2.NewsBean dataBean : result.getData()) {
                                 System.out.println(dataBean.toString());
                             }
 

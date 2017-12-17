@@ -2,6 +2,7 @@ package com.bupt.heartarea.utils;
 
 import com.bupt.heartarea.bean.HistoryDataItemBean;
 import com.bupt.heartarea.bean.Result;
+import com.bupt.heartarea.bean.Result2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class GlobalData {
     // 在日历上选择的日期
 //    public static String
 
-    public static Result result;
+    public static Result2 result;
 
     public static enum MeasureType {HEART_RATE, BLOOD_OXYGEN, PRESSURE, BLOOD_PRESSURE}
 
