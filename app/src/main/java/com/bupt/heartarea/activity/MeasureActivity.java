@@ -32,7 +32,7 @@ import com.bupt.heartarea.R;
 import com.bupt.heartarea.bean.MeasureData;
 import com.bupt.heartarea.bean.ResponseBean;
 import com.bupt.heartarea.bean.UserDataBean;
-import com.bupt.heartarea.bloodpressure.Bloodpressure;
+import com.bupt.heartarea.bloodpressure.BloodPressure;
 import com.bupt.heartarea.sg.SGFilter;
 import com.bupt.heartarea.ui.MySurfaceView;
 import com.bupt.heartarea.ui.ProgressWheel;
@@ -144,7 +144,7 @@ public class MeasureActivity extends Activity {
     private static final int AXISXMAX = 6000 / INTERVAL;
 
     // 采集多少个数据停止
-    private static final int STOP_COUNT = (int) (((float) AXISXMAX) * 2f);//   正式为3
+    private static final int STOP_COUNT = (int) (((float) AXISXMAX) * 3f);//   正式为3
     // 圆形进度条总的数值
     private static final int PROGRESS_STOP_COUNT = STOP_COUNT - 10; //
 
@@ -279,7 +279,7 @@ public class MeasureActivity extends Activity {
         mRealTimeHeartRate = CalHeartRate.calHeartRate(peaksList, INTERVAL);
         Log.i("real time heartRate", mRealTimeHeartRate + "");
 
-        int[] bloodpressure = Bloodpressure.calculate(realtime_data_origin_copy_array);
+        int[] bloodpressure = BloodPressure.calBloodPressure(realtime_data_origin_copy_array);
         mRealTimeBloodPressureHigh = bloodpressure[0];
         mRealTimeBloodPressureLow = bloodpressure[1];
         return true;
@@ -622,7 +622,7 @@ public class MeasureActivity extends Activity {
                         public void run() {
 
 
-                            int[] bloodpressure = Bloodpressure.calculate(data_origin_copy);
+                            int[] bloodpressure = BloodPressure.calBloodPressure(data_origin_copy);
                             mMeasureData.setBlood_pressure_high(bloodpressure[0]);
                             mMeasureData.setBlood_pressure_low(bloodpressure[1]);
                             mBloodPressureHigh = bloodpressure[0];

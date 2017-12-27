@@ -1,112 +1,145 @@
 package com.bupt.heartarea.bloodpressure;
 
+import com.bupt.heartarea.utils.MathUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import Jama.Matrix;
+public class BloodPressure {
 
-public class Bloodpressure {
 
-    public static int[] calculate(double[] data) {
+    public static int[] calBloodPressure(double[] data) {
         //  System.out.println ("here");
         List<Point> points = new ArrayList<Point>();
-        double SBPmean = 0;
-        double DBPmean = 0;
-        List<Double> high_list = new ArrayList<>();
-        List<Double> low_list = new ArrayList<>();
+        List<Double> lBPList = new ArrayList<>();
+        List<Double> hBPList = new ArrayList<>();
+        double lBPSum = 0;
+        double hBPSum = 0;
+        int count = 0;
         //ArrayList<Integer> samples = new ArrayList<Integer>();
         //data是未处理的原始数据
-//        double[] data = {4.1952, 4.1814, 4.1746, 4.1769, 4.1864, 4.1995, 4.2123, 4.2217, 4.2255, 4.2223, 4.2119, 4.197, 4.1823, 4.1727, 4.1709, 4.1766, 4.187, 4.1986, 4.2076, 4.2103, 4.2049, 4.1919, 4.1756, 4.1621, 4.1567, 4.1606, 4.1718, 4.1864, 4.2005, 4.2109, 4.2151, 4.2116, 4.2015, 4.1883, 4.1773, 4.1727, 4.1753, 4.1833, 4.1938, 4.2045, 4.213, 4.2173, 4.2151, 4.2063, 4.1933, 4.1808, 4.1732, 4.1721, 4.1764, 4.1836, 4.1919, 4.1996, 4.2048, 4.2053, 4.1996, 4.189, 4.1778, 4.1707, 4.1703, 4.1761, 4.1856, 4.1964, 4.2068, 4.2151, 4.2187, 4.2153, 4.2048, 4.1908, 4.1788, 4.173, 4.1743, 4.1805, 4.1885, 4.1966, 4.204, 4.2096, 4.2112, 4.2071, 4.1981, 4.1877, 4.1804, 4.1789, 4.1831, 4.1912, 4.201, 4.2109, 4.2187, 4.222, 4.2191, 4.2104, 4.1992, 4.1902, 4.187, 4.1898, 4.1967, 4.2052, 4.2135, 4.2202, 4.2236, 4.222, 4.2152, 4.2055, 4.197, 4.1932, 4.195, 4.2011, 4.2094, 4.2182, 4.2258, 4.2297, 4.2276, 4.2187, 4.2053, 4.1925, 4.1852, 4.1852, 4.1908, 4.1991, 4.2072, 4.2134, 4.2163, 4.2145, 4.2073, 4.196, 4.1842, 4.1758, 4.173, 4.1754, 4.1814, 4.1889, 4.1959, 4.2002, 4.1994, 4.1926, 4.1815, 4.17, 4.1625, 4.1611, 4.1648, 4.1713, 4.1785, 4.185, 4.1895, 4.1905, 4.1869, 4.1791, 4.1699, 4.1629, 4.1603, 4.1623, 4.1673, 4.1736, 4.1803, 4.1861, 4.1891, 4.1876, 4.1812, 4.172, 4.1638, 4.1597, 4.1603, 4.1644, 4.1702, 4.1766, 4.1827, 4.1871, 4.1879, 4.1838, 4.1757, 4.1671, 4.1616, 4.1608, 4.1641, 4.1697, 4.176, 4.1823, 4.188, 4.1913, 4.1902, 4.1843, 4.1755, 4.1677, 4.164, 4.1651, 4.1699, 4.1765, 4.1835, 4.1892, 4.1919, 4.1898, 4.183, 4.1736, 4.1658, 4.1629, 4.1656, 4.1721, 4.1801, 4.1877, 4.1934, 4.196, 4.1941, 4.1874, 4.1774, 4.1676, 4.1614, 4.1601, 4.1628, 4.168, 4.1743, 4.1805, 4.1851, 4.1861, 4.182, 4.1736, 4.1643, 4.1577, 4.1562, 4.1592, 4.1649, 4.1715, 4.1779, 4.183, 4.1853, 4.1831, 4.1763, 4.167, 4.1592, 4.1555, 4.1565, 4.1608, 4.1664, 4.1722, 4.1777, 4.1818, 4.1827, 4.179, 4.1714, 4.1628, 4.1567, 4.1552, 4.158, 4.1633, 4.1697, 4.1762, 4.182, 4.1854, 4.1844, 4.1785, 4.1694, 4.1609, 4.1563, 4.1568, 4.161, 4.1671, 4.1739, 4.1809, 4.1871, 4.1906, 4.1893, 4.1831, 4.1743, 4.1667, 4.1632, 4.1643, 4.1686, 4.1744, 4.1806, 4.1865, 4.1906, 4.1907, 4.1857, 4.1769, 4.1675, 4.1615, 4.1603, 4.1631, 4.1678, 4.173, 4.1782, 4.1826, 4.1844, 4.1818, 4.1743, 4.1642, 4.1554, 4.1509, 4.1514, 4.1553, 4.1609, 4.167, 4.1733, 4.1785, 4.1808, 4.1774, 4.1703, 4.162, 4.1539, 4.1497, 4.15, 4.1631, 4.1823};
+        //double[] data={4.0063, 4.0134, 4.0282, 4.0469, 4.0629, 4.0701, 4.0648, 4.0471, 4.0208, 3.9927, 3.97, 3.9578, 3.9569, 3.9641, 3.9738, 3.9813, 3.9849, 3.9856, 3.9857, 3.9869, 3.9891, 3.9914, 3.993, 3.9939, 3.9947, 3.9955, 3.9961, 3.9957, 3.9938, 3.9907, 3.9873, 3.9848, 3.9839, 3.9844, 3.9857, 3.9871, 3.9885, 3.9898, 3.9911, 3.9925, 3.9937, 3.9947, 3.9956, 3.9966, 3.9977, 3.9983, 3.998, 3.9961, 3.993, 3.9895, 3.9866, 3.9851, 3.985, 3.9857, 3.9868, 3.9878, 3.9888, 3.9898, 3.9909, 3.992, 3.9931, 3.9946, 3.9964, 3.9985, 4.0002, 4.0007, 3.9995, 3.9965, 3.9926, 3.989, 3.9865, 3.9856, 3.9859, 3.9867, 3.9875, 3.9881, 3.9885, 3.989, 3.9898, 3.9907, 3.9915, 3.9923, 3.993, 3.9939, 3.9951, 3.996, 3.9959, 3.9944, 3.9914, 3.9878, 3.9845, 3.9823, 3.9814, 3.9814, 3.9818, 3.9822, 3.9825, 3.983, 3.9835, 3.9842, 3.9848, 3.9857, 3.9867, 3.9876, 3.988, 3.9873, 3.9853, 3.9825, 3.9796, 3.9774, 3.9762, 3.9758, 3.9758, 3.9759, 3.9762, 3.9767, 3.9776, 3.9787, 3.9798, 3.9807, 3.9814, 3.9823, 3.9836, 3.9848, 3.9855, 3.985, 3.983, 3.98, 3.9768, 3.9742, 3.9725, 3.9718, 3.9715, 3.9715, 3.9717, 3.9723, 3.9733, 3.9745, 3.9759, 3.9771, 3.9784, 3.9797, 3.981, 3.9822, 3.9828, 3.9822, 3.9806, 3.9782, 3.9759, 3.9742, 3.9734, 3.9732, 3.9733, 3.9735, 3.9736, 3.9739, 3.9744, 3.975, 3.9757, 3.9765, 3.9774, 3.978, 3.9783, 3.9778, 3.9765, 3.9746, 3.9727, 3.9714, 3.9708, 3.9708, 3.9711, 3.9712, 3.9714, 3.971, 3.9716, 3.9728, 3.9722, 3.971, 3.97, 3.9788, 3.9923};
+        //double[] data={3.8859, 3.886, 3.8888, 3.8927, 3.896, 3.8977, 3.8982, 3.8983, 3.8989, 3.9004, 3.903, 3.9064, 3.9101, 3.9128, 3.9129, 3.9088, 3.8999, 3.8876, 3.8755, 3.8685, 3.8703, 3.8817, 3.8998, 3.9191, 3.9346, 3.9437, 3.9472, 3.9478, 3.9485, 3.9508, 3.9543, 3.9573, 3.9581, 3.9557, 3.9503, 3.9434, 3.937, 3.9326, 3.9307, 3.931, 3.9324, 3.9341, 3.9357, 3.9374, 3.9392, 3.9413, 3.9438, 3.9467, 3.95, 3.9527, 3.9538, 3.9523, 3.9478, 3.9414, 3.9349, 3.9299, 3.9271, 3.9263, 3.9267, 3.9277, 3.9286, 3.9294, 3.9301, 3.9308, 3.9317, 3.9332, 3.9351, 3.937, 3.9377, 3.9362, 3.9322, 3.9266, 3.9209, 3.9166, 3.9144, 3.9141, 3.915, 3.9162, 3.9173, 3.9182, 3.9187, 3.919, 3.9193, 3.9201, 3.9215, 3.9231, 3.9237, 3.9223, 3.9189, 3.9143, 3.9101, 3.9074, 3.9066, 3.907, 3.9078, 3.9084, 3.9089, 3.9098, 3.9113, 3.9136, 3.9165, 3.9195, 3.922, 3.9228, 3.9215, 3.9179, 3.9131, 3.9083, 3.9048, 3.903, 3.9026, 3.9031, 3.9039, 3.9049, 3.9061, 3.9076, 3.9095, 3.9119, 3.9147, 3.9174, 3.9191, 3.919, 3.9168, 3.9129, 3.9086, 3.9051, 3.9032, 3.9029, 3.9038, 3.9051, 3.9065, 3.908, 3.9096, 3.9114, 3.9136, 3.9161, 3.9188, 3.9211, 3.9223, 3.9216, 3.9192, 3.9157, 3.9122, 3.9099, 3.9091, 3.9095, 3.9107, 3.912, 3.9133, 3.9147, 3.9162, 3.9181, 3.9205, 3.9232, 3.9257, 3.9271, 3.9269, 3.9249, 3.9216, 3.9183, 3.9161, 3.9153, 3.9158, 3.9168, 3.9179, 3.9187, 3.9194, 3.9202, 3.9213, 3.9229, 3.9249, 3.9268, 3.9281, 3.9272, 3.9255, 3.923, 3.9181, 3.9133, 3.9098, 3.9173, 3.9305};
         int[] loc = FindPeaks.findPeaks1(data, data.length);//loc为极小值位置,这里是用于切割独立波的，但是要是想实时显示的话，这部分得在安卓写，可能和你实时显示心率的非常相似，应该不难
-        for (int k = 0; k < loc.length - 1; k++) {
+        for (int k = 1; k < loc.length - 1; k++) {
             double[] onewave = cut(data, loc[k], loc[k + 1]);//注意！！如果要实时显示的话，这里你要检测出来最低值（我这里是切割成独立波了，但这并不符合实时要求），
             //也就是在安卓端分割成独立波，这部分的代码我真的不会写，如果要实时显示血压值的话，从此部分以下是你安卓端的核心代码。有疑问打电话。
 //    	double[] onewave=new double[onewave1.length];
-//    	for (int z=0;z<onewave1.length;z++){
-//    		onewave[z]=onewave1[onewave1.length-1-z];
+//    	for (int z=0;z<onewave.length;z++){
+//    		System.out.println(onewave[z]);  
 //    	}
+//    	
+            double[] newonewave = newdata(onewave);//插值成10个
 
-            int[] loc2 = FindPeaks.findPeaks(onewave, onewave.length);//找到每一个独立波的顶点
-
-
-            double[] upwave = cut(onewave, 0, loc2[0]);
-            double[] newup = newdata(upwave);//插值成10个
-            double[] upindex = diff(newup);
-            double[] downwave = cut(onewave, loc2[0], onewave.length - 1);
-            double[] newdown = newdata(downwave);//插值成10个
+            int[] loc2 = FindPeaks.findPeaks(newonewave, newonewave.length);//找到每一个独立波的顶点
 
 
-            double[] downindex = diff(newdown);
-            double[] index = new double[18];
-            for (int i = 0; i < 9; i++) {
-                index[i] = upindex[i];
-
+            double[] upwave = cut(newonewave, 0, loc2[0]);
+            int SUT = upwave.length;
+            double minupwave = min(upwave);
+            double[] newupwave = new double[upwave.length];
+            for (int z = 0; z < upwave.length; z++) {
+                newupwave[z] = (upwave[z] - minupwave);
             }
+            double shigh = newupwave[upwave.length - 1] - newupwave[0];
+//      	  System.out.println(shigh);  
+            int sw10 = cutlength(newupwave, 0.1 * shigh);
+            int sw25 = cutlength(newupwave, 0.25 * shigh);
+            int sw33 = cutlength(newupwave, 0.33 * shigh);
+            int sw50 = cutlength(newupwave, 0.5 * shigh);
+            int sw66 = cutlength(newupwave, 0.66 * shigh);
+            int sw75 = cutlength(newupwave, 0.75 * shigh);
 
-            for (int i = 9; i < 18; i++) {
-                index[i] = downindex[i - 9];
 
+            double[] downwave = cut(newonewave, loc2[0] + 1, newonewave.length - 1);
+            int DT = downwave.length;
+            double mindownwave = min(downwave);
+            double[] newdownwave = new double[downwave.length];
+            for (int z = 0; z < downwave.length; z++) {
+                newdownwave[z] = (downwave[z] - mindownwave);
             }
+            double dhigh = newdownwave[downwave.length - 1] - newdownwave[0];
+            //System.out.println(dhigh);
+            double dw10 = cutlength(newdownwave, 0.1 * dhigh);
+            double dw25 = cutlength(newdownwave, 0.25 * dhigh);
+            double dw33 = cutlength(newdownwave, 0.33 * dhigh);
+            double dw50 = cutlength(newdownwave, 0.5 * dhigh);
+            double dw66 = cutlength(newdownwave, 0.66 * dhigh);
+            double dw75 = cutlength(newdownwave, 0.75 * dhigh);
+            double sdw10 = sw10 + dw10;
+            double dsdw10 = dw10 / sw10;
+            double sdw25 = sw25 + dw25;
+            double dsdw25 = dw25 / sw25;
+            double sdw33 = sw33 + dw33;
+            double dsdw33 = dw33 / sw33;
+            double sdw50 = sw50 + dw50;
+            double dsdw50 = dw50 / sw50;
+            double sdw66 = sw66 + dw66;
+            double dsdw66 = dw66 / sw66;
+            double sdw75 = sw75 + dw75;
+            double dsdw75 = dw75 / sw75;
+            double[] index = new double[21];
+            index[0] = SUT;
+            index[1] = DT;
+            index[2] = sw10;
+            index[3] = sdw10;
+            index[4] = dsdw10;
+            index[5] = sw25;
+            index[6] = sdw25;
+            index[7] = dsdw25;
+            index[8] = sw33;
+            index[9] = sdw33;
+            index[10] = dsdw33;
+            index[11] = sw50;
+            index[12] = sdw50;
+            index[13] = dsdw50;
+            index[14] = sw66;
+            index[15] = sdw66;
+            index[16] = dsdw66;
+            index[17] = sw75;
+            index[18] = sdw75;
+            index[19] = dsdw75;
+            index[20] = 1;
 
-            double[] mapindex = mapminmax(index);
-            double[][] finalindex = new double[18][1];
-            //finalindex[0][0]=1;
-            for (int i = 0; i < 18; i++) {
-                finalindex[i][0] = mapindex[i];
+            double[] highlinear = {-0.0141695308746375, 0.124514673756680, 2.91891907150545, -1.73543317769192, 29.7706514633325, 1.89003959594315, -1.74367630176961, 17.0293835574325, -4.68390081568273, 1.27447548792587, -8.47617739787337, -3.42989954043880, 1.07852460495530, -5.64326004574694, 6.14118371736822, -1.37687531927999, 5.88286130863679, 7.72229480589957, 1.10196544797836, 5.71695603892585, 33.3086261309679};
+            double[] lowlinear = {-0.0621887441943530, -0.292516289680269, -0.0666167749995780, 0.215053032916887, 4.85563985289613, 1.84863853747798, -0.973486114606966, 12.1705848849598, -2.33050146046521, 0.778641443825689, -6.83689846262005, -1.95279214675570, 0.339701683423402, -7.21008891101360, 3.96824609349301, -1.94283642587498, 8.52859878912821, 2.27929902467412, 0.846829085786168, 4.29719364255601, 36.8946614586999};
+
+
+            double highbp = 10;
+            double lowbp = 10;
+            for (int i = 0; i < 21; i++) {
+                //System.out.println(index[i]);
+                highbp = highbp + index[i] * highlinear[i];
+                lowbp = lowbp + index[i] * lowlinear[i];
             }
-            Matrix Index = Matrix.constructWithCopy(finalindex);//把指标转换成矩阵
+            hBPList.add(highbp);
+            lBPList.add(lowbp);
 
+            System.out.println("高压：" + highbp);
+            System.out.println("低压：" + lowbp);
 
-            double[] result = fitnet.fitnnet(Index);//resulet存着结果[0]是高压[1]是低压
-
-            if (result[0] > 0 && result[0] < 200 && result[1] > 0 && result[1] < 200) {
-                high_list.add(result[0]);
-                low_list.add(result[1]);
-            }
+            //double[] mapindex=mapminmax(index);
+//          double[][] finalindex=new double[18][1];
+//        //finalindex[0][0]=1;
+//          for(int i=0;i<18;i++){
+//        	finalindex[i][0]=mapindex[i];
+//          }
+//          Matrix Index=Matrix.constructWithCopy(finalindex);//把指标转换成矩阵
+//      
+//		
+//	        
+//          double[] result=fitnet.fitnnet(Index);//resulet存着结果[0]是高压[1]是低压
 
         }
 
-
-        int sum_high = 0;
-        int sum_low = 0;
-        int size = high_list.size();
-        for (int i = 0; i < size; i++) {
-            sum_high += high_list.get(i);
-            sum_low += low_list.get(i);
+        // 去掉高压计算中过低的数值
+        double highBloodPressureAver = MathUtil.getAverage(hBPList);
+        double lowBloodPressureAver = MathUtil.getAverage(lBPList);
+        for (int i = hBPList.size() - 1; i >= 0; i--) {
+            if (Math.abs(hBPList.get(i) - highBloodPressureAver) > highBloodPressureAver * 0.2)
+                hBPList.remove(i);
         }
-        int aver_sbp = 0;
-        int aver_dbp = 0;
-        if (size > 0) {
-            aver_sbp = sum_high / size;
-            aver_dbp = sum_low / size;
-        }
-
-        sum_high = 0;
-        sum_low = 0;
-        for (int i = 0; i < high_list.size(); i++) {
-            if (high_list.get(i) < aver_sbp || high_list.get(i) > aver_sbp + 15) {
-                high_list.remove(i);
-                low_list.remove(i);
-                i--;
-            } else {
-                sum_high += high_list.get(i);
-                sum_low += low_list.get(i);
-            }
-        }
-
-        size = high_list.size();
-        if (size > 0) {
-            aver_sbp = sum_high / size;
-            aver_dbp = sum_low / size;
-        }
-
-        int[] res = new int[2];
-        res[0] = aver_sbp;
-        res[1] = aver_dbp;
-        System.out.println("高压平均值：" + aver_sbp);
-        System.out.println("低压平均值：" + aver_dbp);
-
-        return res;
+        return new int[]{(int) MathUtil.getAverage(hBPList), (int) MathUtil.getAverage(lBPList)};
 
     }
 
@@ -126,6 +159,18 @@ public class Bloodpressure {
         }
         return cut;
     }
+
+    public static int cutlength(double[] data, double minvalue) {//截取，截取小于minvalue的长度
+        int cutlength = 0;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] > minvalue) {
+                cutlength = cutlength + 1;
+            }
+            //System.out.println(data[i]);
+        }
+        return cutlength;
+    }
+
 
     public static double[] diff(double[] data) {//差值，diff
         double[] diff = new double[data.length - 1];
@@ -166,9 +211,10 @@ public class Bloodpressure {
         return map;
     }
 
-    public static double[] newdata(double[] data) {
+    public static double[] newdata(double[] data) {//插值，用于补偿手机和开源网站中数据的采集频率差的问题
         List<Point> points = new ArrayList<Point>();
         for (int j = 0; j < data.length; j++) {
+
             points.add(new Point(j, (int) (data[j] * 100000)));//points是point（int，int）格式数据，所以把纵坐标加大
 
         }
@@ -179,11 +225,15 @@ public class Bloodpressure {
             }
             spline.calcSpline();
         }
+        int newlength = data.length * 125 / 100;
 
-        double[] originaldata = new double[10];//定义新的插值后数据
+        double step = (1.0 / newlength);
+
+//System.out.println(step);
+        double[] originaldata = new double[newlength + 1];//定义新的插值后数据
         if (points.size() > 2) {
             int i = 0;
-            for (float f = 0; f <= 1; f += 0.1) {//把原来几个个值经过插值计算变成10个值，其实就是使得曲线更平滑，相当于一个重采样（但是这个重采样更接近曲线本身）
+            for (float f = 0; f <= 1; f += step) {//把原来几个个值经过插值计算变成10个值，其实就是使得曲线更平滑，相当于一个重采样（但是这个重采样更接近曲线本身）
                 Point px = spline.getPoint(f);
                 double y = px.y;
                 originaldata[i] = y / 100000;
