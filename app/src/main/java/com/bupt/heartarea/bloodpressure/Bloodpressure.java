@@ -7,7 +7,6 @@ import java.util.List;
 
 public class BloodPressure {
 
-
     public static int[] calBloodPressure(double[] data) {
         //  System.out.println ("here");
         List<Point> points = new ArrayList<Point>();
@@ -132,12 +131,15 @@ public class BloodPressure {
 
         }
 
-        // 去掉高压计算中过低的数值
+        // 去掉高压计算中过低和过高的数值
         double highBloodPressureAver = MathUtil.getAverage(hBPList);
         double lowBloodPressureAver = MathUtil.getAverage(lBPList);
         for (int i = hBPList.size() - 1; i >= 0; i--) {
-            if (Math.abs(hBPList.get(i) - highBloodPressureAver) > highBloodPressureAver * 0.2)
+//            if (Math.abs(hBPList.get(i) - highBloodPressureAver) > highBloodPressureAver * 0.2) {
+            if (hBPList.get(i) < 80 || hBPList.get(i) > 180) {
+                lBPList.remove(i);
                 hBPList.remove(i);
+            }
         }
         return new int[]{(int) MathUtil.getAverage(hBPList), (int) MathUtil.getAverage(lBPList)};
 

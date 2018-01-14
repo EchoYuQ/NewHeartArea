@@ -620,8 +620,6 @@ public class MeasureActivity extends Activity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-
-
                             int[] bloodpressure = BloodPressure.calBloodPressure(data_origin_copy);
                             mMeasureData.setBlood_pressure_high(bloodpressure[0]);
                             mMeasureData.setBlood_pressure_low(bloodpressure[1]);
@@ -667,6 +665,8 @@ public class MeasureActivity extends Activity {
                         float_list.add(num);
                     }
                     mMeasureData.setData(float_list);
+                    System.out.println("原始数据float类型：------");
+                    System.out.println(float_list);
 
                     //---------------------------------------------------------
                     // 1. 用于用户使用
@@ -908,9 +908,7 @@ public class MeasureActivity extends Activity {
 //                        Toast.makeText(context, response, Toast.LENGTH_LONG).show();
 
                         Gson gson = new Gson();
-
                         ResponseBean responseBean = gson.fromJson(response, ResponseBean.class);
-
                         // TODO: 2017/3/20 加一个GlobalData
                         if (responseBean != null) {
                             if (responseBean.getCode() == 0) {
@@ -975,8 +973,7 @@ public class MeasureActivity extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 //在这里设置需要post的参数
-                Map<String, String> map = new HashMap<String, String>();
-
+                Map<String, String> map = new HashMap<>();
                 Gson gson = new Gson();
                 String measuredata_str = gson.toJson(mMeasureData);
                 map.put("userid", GlobalData.getUserid());
