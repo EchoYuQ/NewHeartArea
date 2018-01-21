@@ -32,7 +32,7 @@ import com.bupt.heartarea.R;
 import com.bupt.heartarea.bean.MeasureData;
 import com.bupt.heartarea.bean.ResponseBean;
 import com.bupt.heartarea.bean.UserDataBean;
-import com.bupt.heartarea.bloodpressure.BloodPressure;
+import com.bupt.heartarea.bloodpressure.BloodPressure3;
 import com.bupt.heartarea.sg.SGFilter;
 import com.bupt.heartarea.ui.MySurfaceView;
 import com.bupt.heartarea.ui.ProgressWheel;
@@ -279,9 +279,9 @@ public class MeasureActivity extends Activity {
         mRealTimeHeartRate = CalHeartRate.calHeartRate(peaksList, INTERVAL);
         Log.i("real time heartRate", mRealTimeHeartRate + "");
 
-        int[] bloodpressure = BloodPressure.calBloodPressure(realtime_data_origin_copy_array);
-        mRealTimeBloodPressureHigh = bloodpressure[0];
-        mRealTimeBloodPressureLow = bloodpressure[1];
+//        int[] bloodpressure = BloodPressure.calBloodPressure(realtime_data_origin_copy_array);
+//        mRealTimeBloodPressureHigh = bloodpressure[0];
+//        mRealTimeBloodPressureLow = bloodpressure[1];
         return true;
     }
 
@@ -595,40 +595,40 @@ public class MeasureActivity extends Activity {
                     for (int i = 0; i < data_origin_copy_list.size(); i++)
                         data_origin_copy[i] = data_origin_copy_list.get(i);
 
-
-                    double[] data_smoothed = new double[data_origin_list.size()];
-
                     // SG算法的参数矩阵
                     double[] coeffs = SGFilter.computeSGCoefficients(5, 5, 5);
                     // SG算法去噪处理
-                    data_smoothed = new SGFilter(5, 5).smooth(data_origin, coeffs);
+                    double[] data_smoothed = new SGFilter(5, 5).smooth(data_origin, coeffs);
                     // SG算法去噪处理第二遍
                     data_smoothed = new SGFilter(5, 5).smooth(data_smoothed, coeffs);
                     data_smoothed = new SGFilter(5, 5).smooth(data_smoothed, coeffs);
                     data_smoothed = new SGFilter(5, 5).smooth(data_smoothed, coeffs);
 
                     // data_origin_list2（去头去尾）
-                    List<Double> data_origin_list2 = new ArrayList<Double>();
+                    List<Double> data_origin_list2 = new ArrayList<>();
                     // data_smoothed_list为SG算法处理后的值列表（去头去尾）
-                    List<Double> data_smoothed_list = new ArrayList<Double>();
+                    final List<Double> data_smoothed_list = new ArrayList<>();
                     for (int i = 40; i < data_smoothed.length - 10; i++) {
                         data_origin_list2.add(data_origin[i]);
                         data_smoothed_list.add(data_smoothed[i]);
                     }
 
+                    final double[] data_smoothed_copy = new double[data_smoothed_list.size()];
+                    for (int i = 0; i < data_smoothed_list.size(); i++)
+                        data_smoothed_copy[i] = data_smoothed_list.get(i);
+
                     // 计算血压
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            int[] bloodpressure = BloodPressure.calBloodPressure(data_origin_copy);
+//                            int[] bloodpressure = BloodPressure.calBloodPressure(data_origin_copy);
+                            int[] bloodpressure = BloodPressure3.cal(data_smoothed_copy);
                             mMeasureData.setBlood_pressure_high(bloodpressure[0]);
                             mMeasureData.setBlood_pressure_low(bloodpressure[1]);
                             mBloodPressureHigh = bloodpressure[0];
                             mBloodPressureLow = bloodpressure[1];
-
                         }
                     }).start();
-
 
                     Log.i("data_smoothed.length", data_smoothed.length + "");
                     System.out.println("原始数据：");

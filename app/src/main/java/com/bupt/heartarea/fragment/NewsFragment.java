@@ -26,9 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by jiangzehui on 16/11/5.
- */
 public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View view;
     RecyclerView rv;

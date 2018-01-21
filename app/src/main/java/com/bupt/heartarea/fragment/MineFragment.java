@@ -92,10 +92,7 @@ public class MineFragment extends Fragment {
      * 初始化控件方法
      */
     private void initView() {
-
-
         mIvUimage = (RoundImageView) view.findViewById(R.id.iv_uimage);// 头像
-
         mTvGreeting = (TextView) view.findViewById(R.id.id_greeting);
         String time = TimeUtil.getCurrentTime();
         String times[] = time.split(":");

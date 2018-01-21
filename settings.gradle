@@ -1,1 +1,1 @@
-include ':app', ':DatePicker', ':hellocharts-library', ':calJava'
+include ':app', ':DatePicker', ':hellocharts-library'

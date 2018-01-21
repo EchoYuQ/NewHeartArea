@@ -3,15 +3,18 @@ package com.bupt.heartarea.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -30,11 +33,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bupt.heartarea.BuildConfig;
 import com.bupt.heartarea.R;
 import com.bupt.heartarea.bean.ResponseBean;
 import com.bupt.heartarea.retrofit.HttpManager;
 import com.bupt.heartarea.utils.FileUtil;
 import com.bupt.heartarea.utils.GlobalData;
+import com.bupt.heartarea.utils.PhotoUtil;
 import com.bupt.heartarea.utils.Tools;
 import com.google.gson.Gson;
 
@@ -112,7 +117,7 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
     private void initView() {
         mHeadPicture = (ImageView) findViewById(R.id.id_iv_headpicture_change_information);
 
-        String filepath = Environment.getExternalStorageDirectory() + "/download/" + getPhotoFileName();
+        String filepath = Environment.getExternalStorageDirectory() + "/Download/" + getPhotoFileName();
         Log.i("filepath", filepath);
         Bitmap photo = FileUtil.readImageFromLocal(filepath);
 //        Bitmap photo = FileUtil.readImageFromLocal(mContext, getPhotoName());
@@ -225,8 +230,6 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "'img'_yyyyMMdd_HHmmss");
-
-
         return GlobalData.userid + ".jpg";
     }
 
@@ -283,24 +286,41 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
                                 // 从相册中选择
                                 Intent intentFromImage = new Intent();
                                 intentFromImage.setType("image/*");
-                                intentFromImage
-                                        .setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(intentFromImage,
-                                        IMAGE_REQUEST_CODE);
+                                intentFromImage.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(intentFromImage, IMAGE_REQUEST_CODE);
                                 break;
                             case 1:
                                 // 拍照
-                                Intent intentFromCamera = new Intent(
-                                        MediaStore.ACTION_IMAGE_CAPTURE);
-                                if (Tools.hasSdcard()) {
-                                    // 指定调用相机拍照后照片的储存路径
-                                    intentFromCamera.putExtra(
-                                            MediaStore.EXTRA_OUTPUT,
-                                            Uri.fromFile(tempFile));
+//                                Intent intentFromCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                                if (Tools.hasSdcard()) {
+//                                    // 指定调用相机拍照后照片的储存路径
+////                                    intentFromCamera.putExtra(
+////                                            MediaStore.EXTRA_OUTPUT,
+////                                            Uri.fromFile(tempFile));
+//
+//                                    ContentValues contentValues = new ContentValues(1);
+//                                    contentValues.put(MediaStore.Images.Media.DATA, tempFile.getAbsolutePath());
+//                                    Uri uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+//                                    intentFromCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//                                }
+//
+//                                startActivityForResult(intentFromCamera,
+//                                        CAMERA_REQUEST_CODE);
 
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+//                                判断是否是AndroidN以及更高的版本
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    Uri contentUri = FileProvider.getUriForFile(getApplicationContext(),
+                                            BuildConfig.APPLICATION_ID + ".fileProvider", tempFile);
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+                                } else {
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
                                 }
-                                startActivityForResult(intentFromCamera,
-                                        CAMERA_REQUEST_CODE);
+                                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+//                                PhotoUtil.goToCamera(MyInformationActivity.this,CAMERA_REQUEST_CODE);
                                 break;
                             default:
                                 break;
@@ -353,10 +373,20 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case IMAGE_REQUEST_CODE:
-                startPhotoZoom(data.getData());
+                if (data != null) {
+                    startPhotoZoom(data.getData());
+                }
                 break;
             case CAMERA_REQUEST_CODE:
-                startPhotoZoom(Uri.fromFile(tempFile));
+                //判断是否是AndroidN以及更高的版本
+                Uri contentUri;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    contentUri = FileProvider.getUriForFile(getApplicationContext(),
+                            BuildConfig.APPLICATION_ID + ".fileProvider", tempFile);
+                } else {
+                    contentUri = Uri.fromFile(tempFile);
+                }
+                startPhotoZoom(contentUri);
                 break;
             case RESULT_REQUEST_CODE:
                 if (data != null) {
@@ -592,7 +622,7 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
 
     private void postImageToServer(String baseUrl, String suffixUrl, String key, File file, final HashMap<String, String> params) {
 //        retrofit2.Call<String> call = HttpManager.getInstance().postImage(baseUrl, suffixUrl, key, file, file.getName(), params);
-        retrofit2.Call<String> call = HttpManager.getInstance().postImage(baseUrl+suffixUrl,key, file, file.getName(), params);
+        retrofit2.Call<String> call = HttpManager.getInstance().postImage(baseUrl + suffixUrl, key, file, file.getName(), params);
         call.enqueue(new retrofit2.Callback<String>() {
             @Override
             public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
