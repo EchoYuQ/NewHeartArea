@@ -23,7 +23,7 @@ public class PhotoUtil {
     public static void goToCamera(Context context, int requestCode) {
         Log.d("goToCamera", "*****************打开相机********************");
         //创建拍照存储的图片文件
-        File tempFile = new File(FileUtils.checkDirPath(Constants.TEMP_FILE_PATH), Constants.PHOTO_CACHE_FILE_NAME);
+        File tempFile = new File(FileUtils.checkDirPath(Constants.TEMP_FILE_PATH), Constants.AVATAR_CACHE_FILE_NAME);
         //跳转到调用系统相机
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //可能要看一下

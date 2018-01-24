@@ -17,6 +17,7 @@ public final class Constants {
     public static final String MAIN_FILE_PATH = Environment.getExternalStorageDirectory() + "/heartarea/";
     //临时文件存放处
     public static final String TEMP_FILE_PATH = MAIN_FILE_PATH + "temp/";
-    public static final String PHOTO_CACHE_FILE_NAME = "1.jpg";
+    public static final String AVATAR_CACHE_FILE_NAME = "1.jpg";
+    public static final String CAMERA_CACHE_FILE_NAME = "photo.jpg";
 
 }

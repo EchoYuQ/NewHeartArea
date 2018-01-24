@@ -3,7 +3,6 @@ package com.bupt.heartarea.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,10 +36,10 @@ import com.bupt.heartarea.BuildConfig;
 import com.bupt.heartarea.R;
 import com.bupt.heartarea.bean.ResponseBean;
 import com.bupt.heartarea.retrofit.HttpManager;
+import com.bupt.heartarea.utils.Constants;
 import com.bupt.heartarea.utils.FileUtil;
+import com.bupt.heartarea.utils.FileUtils;
 import com.bupt.heartarea.utils.GlobalData;
-import com.bupt.heartarea.utils.PhotoUtil;
-import com.bupt.heartarea.utils.Tools;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -85,6 +84,7 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
     private String[] items_sex = new String[]{"男", "女"};
 
     private File tempFile = new File(Environment.getExternalStorageDirectory(), getPhotoFileName());
+    private File cameraFile = new File(FileUtils.checkDirPath(Constants.TEMP_FILE_PATH), Constants.CAMERA_CACHE_FILE_NAME);
 
     // 请求码
     private static final int IMAGE_REQUEST_CODE = 0;// 打开相册请求码
@@ -308,16 +308,14 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
 //                                        CAMERA_REQUEST_CODE);
 
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-
 //                                判断是否是AndroidN以及更高的版本
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                     Uri contentUri = FileProvider.getUriForFile(getApplicationContext(),
-                                            BuildConfig.APPLICATION_ID + ".fileProvider", tempFile);
+                                            BuildConfig.APPLICATION_ID + ".fileProvider", cameraFile);
                                     intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
                                 } else {
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile));
                                 }
                                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
 //                                PhotoUtil.goToCamera(MyInformationActivity.this,CAMERA_REQUEST_CODE);
@@ -382,11 +380,12 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
                 Uri contentUri;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     contentUri = FileProvider.getUriForFile(getApplicationContext(),
-                            BuildConfig.APPLICATION_ID + ".fileProvider", tempFile);
+                            BuildConfig.APPLICATION_ID + ".fileProvider", cameraFile);
                 } else {
-                    contentUri = Uri.fromFile(tempFile);
+                    contentUri = Uri.fromFile(cameraFile);
                 }
-                startPhotoZoom(contentUri);
+                if (contentUri != null)
+                    startPhotoZoom(contentUri);
                 break;
             case RESULT_REQUEST_CODE:
                 if (data != null) {

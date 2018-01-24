@@ -43,8 +43,8 @@ public class RegisterActivity extends Activity {
     private TimeCount mTimeCount;
 
 
-    private static final String URL_REGISTER = GlobalData.URL_HEAD+":8080/detect3/RegServlet";
-    private static final String URL_REGISTER_VERCODE = GlobalData.URL_HEAD+":8080/detect3/GetVercodeServlet";
+    private static final String URL_REGISTER = GlobalData.URL_HEAD + ":8080/detect3/RegServlet";
+    private static final String URL_REGISTER_VERCODE = GlobalData.URL_HEAD + ":8080/detect3/GetVercodeServlet";
 
     private String mTel;
 
@@ -172,6 +172,10 @@ public class RegisterActivity extends Activity {
                                 Toast.makeText(RegisterActivity.this, "验证码错误",
                                         Toast.LENGTH_LONG).show();
                                 break;
+                            default:
+                                Toast.makeText(RegisterActivity.this, responseBean.getMsg(),
+                                        Toast.LENGTH_LONG).show();
+                                break;
                         }
 
 
@@ -225,7 +229,7 @@ public class RegisterActivity extends Activity {
                                         Toast.LENGTH_LONG).show();
                                 mTimeCount.start();// 开始计时
                                 break;
-                            
+
                             default:
                                 Toast.makeText(RegisterActivity.this,
                                         responseBean.getMsg(), Toast.LENGTH_LONG)
