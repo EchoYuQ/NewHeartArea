@@ -74,7 +74,7 @@ public class HistoryActivity extends Activity implements View.OnClickListener {
     private int mDrawables[] = {R.drawable.heartrate_icon, R.drawable.bloodoxygen_icon, R.drawable.pressure_icon, R.drawable.pressure_icon};
     private String mDataTypeTexts[] = {"心率", "血氧", "心理压力", "血压"};
     String[] pressure_suggestions = {"心理压力低", "心理压力中等", "心理压力高"};
-    String[] blood_oxygten_suggestions = {"血氧含量低", "血氧含量中等", "血压含量高"};
+    String[] blood_oxygten_suggestions = {"血氧含量低", "血氧含量中等", "血氧含量高"};
     String[] heartrate_suggestions = {"心率慢", "心率正常", "心率快"};
     String[] blood_pressure_suggestions = {"血压水平低", "血压正常", "血压水平高"};
     String[] colors = {"#d948637f", "#d970a975", "#d9a67260"};
