@@ -25,6 +25,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="血压值"
+            android:visibility="gone"
             android:textColor="@color/text_green"
             android:textSize="18sp" />
 
@@ -32,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <com.bupt.heartarea.ui.NumberAnimTextView

@@ -25,14 +25,6 @@ import java.util.List;
 import static java.lang.Math.pow;
 
 
-/**
- * Savitzky-Golay filter implementation. For more information see
- * http://www.nrbook.com/a/bookcpdf/c14-8.pdf. This implementation,
- * however, does not use FFT
- * 
- * @author Marcin Rzeźnicki
- * 
- */
 public class SGFilter {
 
 	/**

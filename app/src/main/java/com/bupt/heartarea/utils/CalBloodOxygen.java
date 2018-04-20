@@ -7,6 +7,7 @@ public class CalBloodOxygen {
 
     /**
      * 计算血氧值
+     *
      * @param RED 获取的R通道值数组
      * @param IR  获取的B通道值数组
      * @return
@@ -77,7 +78,7 @@ public class CalBloodOxygen {
             SpO2 = SpO2 + SpO2_time[z];
         }
         double blood_oxygen = SpO2 / L;
-        return blood_oxygen;
+        return blood_oxygen > 100.0 ? 100 : blood_oxygen;
     }
 
     //  sp02 List类型参数的重载方法
@@ -96,9 +97,9 @@ public class CalBloodOxygen {
         }
 
         for (int i = 0; i < n; i++) {
-            blue_array[i]=IR.get(i);
+            blue_array[i] = IR.get(i);
         }
-        return SpO2(red_array,blue_array);
+        return SpO2(red_array, blue_array);
     }
 
 }

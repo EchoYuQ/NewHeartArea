@@ -72,9 +72,9 @@ public class HistoryActivity extends Activity implements View.OnClickListener {
 
 
     private int mDrawables[] = {R.drawable.heartrate_icon, R.drawable.bloodoxygen_icon, R.drawable.pressure_icon, R.drawable.pressure_icon};
-    private String mDataTypeTexts[] = {"心率", "血氧", "心理压力", "血压"};
-    String[] pressure_suggestions = {"心理压力低", "心理压力中等", "心理压力高"};
-    String[] blood_oxygten_suggestions = {"血氧含量低", "血氧含量中等", "血压含量高"};
+    private String mDataTypeTexts[] = {"心率", "血氧", "疲劳度", "血压"};
+    String[] pressure_suggestions = {"疲劳度低", "疲劳度中等", "疲劳度高"};
+    String[] blood_oxygten_suggestions = {"血氧含量低", "血氧含量中等", "血氧含量高"};
     String[] heartrate_suggestions = {"心率慢", "心率正常", "心率快"};
     String[] blood_pressure_suggestions = {"血压水平低", "血压正常", "血压水平高"};
     String[] colors = {"#d948637f", "#d970a975", "#d9a67260"};
@@ -292,6 +292,7 @@ public class HistoryActivity extends Activity implements View.OnClickListener {
                                         bean.setPressure(temp.getInt("pressure"));
                                         bean.setBlood_pressure_high(temp.optInt("blood_pressure_high", 0));
                                         bean.setBlood_pressure_low(temp.optInt("blood_pressure_low", 0));
+                                        bean.setAf(temp.optDouble("af"));
                                         mHistoryDataItemList.add(bean);
                                     }
                                     GlobalData.historyDataItemBeanList = new ArrayList<>(mHistoryDataItemList);

@@ -11,6 +11,8 @@ public class HistoryDataItemBean {
     private int blood_oxygen;
     private int blood_pressure_high;
     private int blood_pressure_low;
+    // 房颤风险
+    private double af;
 
     public HistoryDataItemBean() {
     }
@@ -87,6 +89,14 @@ public class HistoryDataItemBean {
 
     public void setBlood_pressure_low(int blood_pressure_low) {
         this.blood_pressure_low = blood_pressure_low;
+    }
+
+    public double getAf() {
+        return af;
+    }
+
+    public void setAf(double af) {
+        this.af = af;
     }
 
     @Override
