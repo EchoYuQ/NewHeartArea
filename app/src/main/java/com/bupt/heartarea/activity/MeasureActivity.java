@@ -32,7 +32,6 @@ import com.bupt.heartarea.R;
 import com.bupt.heartarea.bean.MeasureData;
 import com.bupt.heartarea.bean.ResponseBean;
 import com.bupt.heartarea.bean.UserDataBean;
-import com.bupt.heartarea.bloodpressure.BloodPressure3;
 import com.bupt.heartarea.sg.SGFilter;
 import com.bupt.heartarea.ui.MySurfaceView;
 import com.bupt.heartarea.ui.ProgressWheel;
@@ -266,19 +265,20 @@ public class MeasureActivity extends Activity {
         System.out.println(realtime_data_smoothed_list);
         // peaksList为峰的横坐标列表
         List<Integer> peaksList = CalHeartRate.findPeaksRealTime(realtime_data_smoothed_list);
-
         List<Integer> rr = CalHeartRate.calRRInteval(peaksList, INTERVAL);
+        // 二次寻峰
+        List<Integer> peaksListAgain = CalHeartRate.findPeaksAgain(rr, INTERVAL);
         System.out.println("实时心率RR间隔");
         System.out.println(rr);
         // 判断寻峰时 峰与峰之间的间隔，如果超过了阈值范围，证明寻峰发生错误，重测
-        if (rr != null && rr.size() > 0) {
-            int n = rr.size();
-            int time0 = rr.get(0);
-            int time = rr.get(n - 1);
-            if (time0 < 500 || time0 > 1400) return false;
-            if (time < 500 || time > 1400) return false;
-        }
-        mRealTimeHeartRate = CalHeartRate.calHeartRate(peaksList, INTERVAL);
+//        if (rr != null && rr.size() > 0) {
+//            int n = rr.size();
+//            int time0 = rr.get(0);
+//            int time = rr.get(n - 1);
+//            if (time0 < 500 || time0 > 1400) return false;
+//            if (time < 500 || time > 1400) return false;
+//        }
+        mRealTimeHeartRate = CalHeartRate.calHeartRate(peaksListAgain, INTERVAL);
         Log.i("real time heartRate", mRealTimeHeartRate + "");
 
 //        int[] bloodpressure = BloodPressure.calBloodPressure(realtime_data_origin_copy_array);

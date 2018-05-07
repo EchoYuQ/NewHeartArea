@@ -1,5 +1,7 @@
 package com.bupt.heartarea.utils;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +30,9 @@ public class CalHeartRate {
                     && datas[i] > datas[i + 6]
                     && datas[i] > datas[i + 7]
                     ) {
-                if(i-last_index>10)
-                {
+                if (i - last_index > 10) {
                     list.add(i);
-                    last_index=i;
+                    last_index = i;
                 }
             }
 
@@ -65,13 +66,21 @@ public class CalHeartRate {
      */
     public static List<Integer> findPeaksRealTime(double[] datas) {
         List<Integer> list = new ArrayList<Integer>();
+        List<Integer> indMax = new ArrayList<Integer>();
         int length = datas.length;
         for (int i = 1; i < length - 8; i++) {
             if (datas[i] > datas[i - 1] && datas[i] > datas[i + 1] && datas[i] > datas[i + 2] && datas[i] > datas[i + 3] && datas[i] > datas[i + 4] && datas[i] > datas[i + 5] && datas[i] > datas[i + 6] && datas[i] > datas[i + 7]) {
-
                 list.add(i);
             }
         }
+//        for (int i = 1; i < length - 1; i++) {
+//            double firstDerivative = (datas[i] - datas[i - 1]) / 0.005;
+//            double secondDerivative = (datas[i + 1] + datas[i - 1] - 2 * datas[i]) /
+//                    Math.pow(0.005, 2);
+//            if (firstDerivative < 1 && secondDerivative < 0) {
+//                indMax.add(i);
+//            }
+//        }
         System.out.println("findPeaks()");
         System.out.println(list);
         return list;
@@ -139,6 +148,27 @@ public class CalHeartRate {
         return rrList;
     }
 
+    /***
+     *  二次寻峰
+     * @param rrInteval
+     * @return 去除异常的峰值横坐标
+     */
+    public static List<Integer> findPeaksAgain(List<Integer> rrInteval, int interval) {
+        List<Integer> peaksAgain = new ArrayList<Integer>();
+        int index = 0;
+        int count = 0;
+        for (int i = 0; i < rrInteval.size(); i++) {
+            if (500 <= rrInteval.get(i) && rrInteval.get(i) <= 1400) {
+                index += rrInteval.get(i) / interval;
+                peaksAgain.add(index);
+                count++;
+                Log.e("index", String.valueOf(index));
+                Log.e("count", String.valueOf(count));
+            }
+        }
+        return peaksAgain;
+    }
+
 
     /**
      * 计算rr间隔
@@ -150,10 +180,63 @@ public class CalHeartRate {
     public static List<Integer> calRRInteval(List<Integer> peaks_list, int interval) {
         if (peaks_list == null || peaks_list.size() == 0) return null;
         List<Integer> rrList = new ArrayList<Integer>();
+        List<Integer> calAverageList = new ArrayList<Integer>();
         int length = peaks_list.size();
-        for (int i = 0; i < length - 1; i++)
+//        for (int i = 0; i < length - 1; i++) {
+//            rrList.add((peaks_list.get(i + 1) - peaks_list.get(i)) * interval);
+//        }
+//        return rrList;
+        // 寻找相邻RR间隔差小于等于100的数据
+        for (int i = 1; i < length - 1; i++) {
+            int rrDiffer = (peaks_list.get(i + 1) - peaks_list.get(i) - peaks_list.get(i) + peaks_list.get(i - 1)) * interval;
+            if (Math.abs(rrDiffer) <= 200) {
+                calAverageList.add((peaks_list.get(i + 1) - peaks_list.get(i)) * interval);
+                Log.e("peaksList i + 1", String.valueOf((peaks_list.get(i + 1))));
+                Log.e("peaksList i", String.valueOf((peaks_list.get(i))));
+                Log.e("有效rr间隔值", String.valueOf((peaks_list.get(i + 1) - peaks_list.get(i)) * interval));
+
+            }
             rrList.add((peaks_list.get(i + 1) - peaks_list.get(i)) * interval);
+        }
+//        int average = calMovingAverage(calAverageList, 8);
+//        Log.e("滑动平均值", String.valueOf(average));
+//        List<Integer> outlierRemovalRRlist = new ArrayList<Integer>();
+//        // 去除距离滑动平均值远于30的RR间隔
+//        for (int i = 0; i < rrList.size(); i++) {
+//            int differ = average - rrList.get(i);
+//            if (Math.abs(differ) < 30) {
+//                outlierRemovalRRlist.add(lowpass(rrList.get(i)));
+//            }
+//        }
+//        for (int i = 0; i < outlierRemovalRRlist.size(); i++) {
+//            Log.e("rr间隔数值", String.valueOf(outlierRemovalRRlist.get(i)));
+//        }
         return rrList;
+    }
+
+    public static int lowpass(int input) {
+        double lowpass = 0.0f;
+        lowpass = (double) input * 0.1f + lowpass * 0.9f;
+        return (int) lowpass;
+    }
+
+    /***
+     * 计算滑动平均值
+     * @param arrayList
+     * @param T
+     * @return
+     */
+    public static int calMovingAverage(List<Integer> arrayList, int T) {
+        int sum = 0, average = 0;
+        for (int i = 0; i < arrayList.size() - T; i++) {
+            int temp = 0;
+            for (int j = 0; j < T; j++) {
+                temp += arrayList.get(i + j);
+            }
+            sum += temp / T;
+        }
+        average = sum / T;
+        return average;
     }
 
 
