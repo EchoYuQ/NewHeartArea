@@ -42,14 +42,18 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     CircleIndicator ci1;
     LineIndicator mLiHeartRateProgress;
     LineIndicator mLiBloodOxygenProgress;
+    LineIndicator mLiAfProgress;
     NumberAnimTextView mAnimTvBloodPressureHigh;
     NumberAnimTextView mAnimTvBloodPressureLow;
+
+    private static final String TAG = "ResultActivity";
 
     private int mHeartRate = 0;
     private int mFatigue = 0;
     private int mBloodOxygen = 0;
     private int mBloodPressureHigh = 0;
     private int mBloodPressureLow = 0;
+    private double mAf = 0;
     private int mBloodPressureLowFeedBack = 0;
     private int mBloodPressureHighFeedBack = 0;
     int mMiddleColor;
@@ -75,20 +79,22 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         mBloodOxygen = bundle.getInt("blood_oxygen");
         mBloodPressureHigh = bundle.getInt("blood_pressure_high");
         mBloodPressureLow = bundle.getInt("blood_pressure_low");
-
+        mAf = bundle.getDouble("af");
+        Log.d(TAG + "af",mAf+"");
         mAlert = bundle.getString("alert");
 
         initColor();
         initView();
+        initIndicator();
         setHeartRateProgress(mHeartRate);
-        testIndicator();
         setBloodOxygenProgress(mBloodOxygen);
-        Log.e("mBloodOxygen", mBloodOxygen + "");
+        setAfProgress(mAf);
     }
 
     private void initView() {
         mLiHeartRateProgress = (LineIndicator) findViewById(R.id.li_progress_heart_rate);
         mLiBloodOxygenProgress = (LineIndicator) findViewById(R.id.li_progress_blood_oxygen);
+        mLiAfProgress = (LineIndicator) findViewById(R.id.li_progress_af);
         ci1 = (CircleIndicator) findViewById(R.id.ci_1);
 
         mBtnFeedBackYes = (Button) findViewById(R.id.btn_result_yes);
@@ -165,9 +171,37 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     }
 
     /**
+     * 绘制 房颤风险 进度条
+     *
+     * @param value
+     */
+    private void setAfProgress(double value) {
+        String leftAlert = "低";
+        String leftContent = "0";
+        String rightAlert = "高";
+        String rightContent = "100";
+        if (value > 70) {
+            mLiAfProgress.setProgressColor(mHighColor);
+            mLiAfProgress.setIndicatorBackground(mHighColor);
+        } else {
+            if (value > 30) {
+                mLiAfProgress.setProgressColor(mMiddleColor);
+                mLiAfProgress.setIndicatorBackground(mMiddleColor);
+
+            } else {
+                mLiAfProgress.setProgressColor(mLowColor);
+                mLiAfProgress.setIndicatorBackground(mLowColor);
+
+            }
+        }
+        mLiAfProgress.setContent(leftAlert, leftContent, rightAlert, rightContent);
+        mLiAfProgress.setIndicator(-20, 120, (float) value, value + " %");
+    }
+
+    /**
      * 疲劳度仪表盘
      */
-    private void testIndicator() {
+    private void initIndicator() {
 
         List<IndicatorItem> dividerIndicator = new ArrayList<>();
         IndicatorItem item1 = new IndicatorItem();

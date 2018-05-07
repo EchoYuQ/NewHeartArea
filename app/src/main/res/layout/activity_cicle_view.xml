@@ -88,6 +88,24 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="房颤风险"
+            android:textColor="@color/text_green"
+            android:textSize="18sp" />
+
+        <com.bupt.heartarea.ui.LineIndicator
+            android:id="@+id/li_progress_af"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
+
         <LinearLayout
             android:id="@+id/ll_result_feedback_all"
             android:layout_width="match_parent"

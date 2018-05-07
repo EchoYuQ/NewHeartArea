@@ -72,11 +72,11 @@ public class HistoryActivity extends Activity implements View.OnClickListener {
 
 
     private int mDrawables[] = {R.drawable.heartrate_icon, R.drawable.bloodoxygen_icon, R.drawable.pressure_icon, R.drawable.pressure_icon};
-    private String mDataTypeTexts[] = {"心率", "血氧", "疲劳度", "血压"};
+    private String mDataTypeTexts[] = {"心率", "血氧", "疲劳度"};
     String[] pressure_suggestions = {"疲劳度低", "疲劳度中等", "疲劳度高"};
     String[] blood_oxygten_suggestions = {"血氧含量低", "血氧含量中等", "血氧含量高"};
     String[] heartrate_suggestions = {"心率慢", "心率正常", "心率快"};
-    String[] blood_pressure_suggestions = {"血压水平低", "血压正常", "血压水平高"};
+//    String[] blood_pressure_suggestions = {"血压水平低", "血压正常", "血压水平高"};
     String[] colors = {"#d948637f", "#d970a975", "#d9a67260"};
     private int mIndex = 0;
 
@@ -228,21 +228,21 @@ public class HistoryActivity extends Activity implements View.OnClickListener {
                         map.put("color", colors[2]);
                     }
                     break;
-                case BLOOD_PRESSURE:
-                    int low = item.getBlood_pressure_low();
-                    int high = item.getBlood_pressure_high();
-                    map.put("value", item.getBlood_pressure_low() + "/" + item.getBlood_pressure_high());
-                    if (high > 130 || low > 90) {
-                        map.put("suggestion", blood_pressure_suggestions[2]);
-                        map.put("color", colors[2]);
-                    } else if (high < 110 || low < 70) {
-                        map.put("suggestion", blood_pressure_suggestions[0]);
-                        map.put("color", colors[0]);
-                    } else {
-                        map.put("suggestion", blood_pressure_suggestions[1]);
-                        map.put("color", colors[1]);
-                    }
-                    break;
+//                case BLOOD_PRESSURE:
+//                    int low = item.getBlood_pressure_low();
+//                    int high = item.getBlood_pressure_high();
+//                    map.put("value", item.getBlood_pressure_low() + "/" + item.getBlood_pressure_high());
+//                    if (high > 130 || low > 90) {
+//                        map.put("suggestion", blood_pressure_suggestions[2]);
+//                        map.put("color", colors[2]);
+//                    } else if (high < 110 || low < 70) {
+//                        map.put("suggestion", blood_pressure_suggestions[0]);
+//                        map.put("color", colors[0]);
+//                    } else {
+//                        map.put("suggestion", blood_pressure_suggestions[1]);
+//                        map.put("color", colors[1]);
+//                    }
+//                    break;
 
             }
             list.add(map);
@@ -484,11 +484,9 @@ public class HistoryActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.id_iv_last:
                 mIndex = (mIndex - 1 + GlobalData.measuretypes.length) % GlobalData.measuretypes.length;
-//                mMeasureType=measuretypes[(mIndex-1+measuretypes.length)%measuretypes.length];
                 break;
             case R.id.id_iv_next:
                 mIndex = (mIndex + 1) % GlobalData.measuretypes.length;
-
                 break;
         }
         // 更改当前历史数据类型（心率、血氧等）

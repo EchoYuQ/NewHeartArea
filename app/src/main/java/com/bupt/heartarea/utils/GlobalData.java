@@ -34,10 +34,11 @@ public class GlobalData {
 
     public static Result2 result;
 
-    public static enum MeasureType {HEART_RATE, BLOOD_OXYGEN, PRESSURE, BLOOD_PRESSURE}
+    public enum MeasureType {HEART_RATE, BLOOD_OXYGEN, PRESSURE, BLOOD_PRESSURE}
 
     public static final MeasureType[] measuretypes = {
-            MeasureType.HEART_RATE, MeasureType.BLOOD_OXYGEN, MeasureType.PRESSURE, MeasureType.BLOOD_PRESSURE
+            MeasureType.HEART_RATE, MeasureType.BLOOD_OXYGEN, MeasureType.PRESSURE
+//            , MeasureType.BLOOD_PRESSURE
     };
 
     public static MeasureType currenttype = MeasureType.HEART_RATE;

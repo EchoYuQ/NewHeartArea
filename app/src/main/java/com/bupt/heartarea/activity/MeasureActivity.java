@@ -144,7 +144,7 @@ public class MeasureActivity extends Activity {
     private static final int AXISXMAX = 6000 / INTERVAL;
 
     // 采集多少个数据停止
-    private static final int STOP_COUNT = (int) (((float) AXISXMAX) * 3f);//   正式为3
+    private static final int STOP_COUNT = (int) (((float) AXISXMAX) * 4f);//   正式为3
     // 圆形进度条总的数值
     private static final int PROGRESS_STOP_COUNT = STOP_COUNT - 10; //
 
@@ -170,6 +170,8 @@ public class MeasureActivity extends Activity {
     private int mBloodPressureHigh = 0;
     // 低压值
     private int mBloodPressureLow = 0;
+    // 房颤风险
+    private double mAf = 0;
 
     private boolean mIsHeartRateCanSet = true;
 
@@ -618,17 +620,17 @@ public class MeasureActivity extends Activity {
                         data_smoothed_copy[i] = data_smoothed_list.get(i);
 
                     // 计算血压
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            int[] bloodpressure = BloodPressure.calBloodPressure(data_origin_copy);
-                            int[] bloodpressure = BloodPressure3.cal(data_smoothed_copy);
-                            mMeasureData.setBlood_pressure_high(bloodpressure[0]);
-                            mMeasureData.setBlood_pressure_low(bloodpressure[1]);
-                            mBloodPressureHigh = bloodpressure[0];
-                            mBloodPressureLow = bloodpressure[1];
-                        }
-                    }).start();
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+////                            int[] bloodpressure = BloodPressure.calBloodPressure(data_origin_copy);
+//                            int[] bloodpressure = BloodPressure3.cal(data_smoothed_copy);
+//                            mMeasureData.setBlood_pressure_high(bloodpressure[0]);
+//                            mMeasureData.setBlood_pressure_low(bloodpressure[1]);
+//                            mBloodPressureHigh = bloodpressure[0];
+//                            mBloodPressureLow = bloodpressure[1];
+//                        }
+//                    }).start();
 
                     Log.i("data_smoothed.length", data_smoothed.length + "");
                     System.out.println("原始数据：");
@@ -904,7 +906,7 @@ public class MeasureActivity extends Activity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("请求成功", "response -> " + response);
+                        Log.d("MeasureActivity", "response -> " + response);
 //                        Toast.makeText(context, response, Toast.LENGTH_LONG).show();
 
                         Gson gson = new Gson();
@@ -929,6 +931,7 @@ public class MeasureActivity extends Activity {
                                     if (jsonObject.has("alert")) {
                                         alert = jsonObject.getString("alert");
                                     }
+                                    mAf = jsonObject.optDouble("af");
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -943,6 +946,7 @@ public class MeasureActivity extends Activity {
                                 bundle.putInt("blood_oxygen", mBloodOxygen);
                                 bundle.putInt("blood_pressure_high", mBloodPressureHigh);
                                 bundle.putInt("blood_pressure_low", mBloodPressureLow);
+                                bundle.putDouble("af", mAf);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 finish();

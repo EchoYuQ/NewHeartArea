@@ -178,8 +178,8 @@
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="bbd3e1bfa973b65072cb0dd15c925243180fe5c5">
-        <dex dex="/Users/yuqing/Downloads/备份/workspace-school/NewHeartArea1/app/build/intermediates/pre-dexed/debug/classes_e7719023aea107f464dc1dfce1303d9834d5ae08.jar" />
+        sha1="5b682fefff5f658b274d05d0f402f764e13f0230">
+        <dex dex="/Users/yuqing/Downloads/备份/workspace-school/NewHeartArea1/app/build/intermediates/pre-dexed/release/classes_e7719023aea107f464dc1dfce1303d9834d5ae08.jar" />
     </item>
     <item
         is-multidex="false"
