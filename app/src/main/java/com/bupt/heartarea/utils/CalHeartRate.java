@@ -1,7 +1,5 @@
 package com.bupt.heartarea.utils;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,8 +160,8 @@ public class CalHeartRate {
                 index += rrInteval.get(i) / interval;
                 peaksAgain.add(index);
                 count++;
-                Log.e("index", String.valueOf(index));
-                Log.e("count", String.valueOf(count));
+//                Log.e("index", String.valueOf(index));
+//                Log.e("count", String.valueOf(count));
             }
         }
         return peaksAgain;
@@ -191,9 +189,9 @@ public class CalHeartRate {
             int rrDiffer = (peaks_list.get(i + 1) - peaks_list.get(i) - peaks_list.get(i) + peaks_list.get(i - 1)) * interval;
             if (Math.abs(rrDiffer) <= 200) {
                 calAverageList.add((peaks_list.get(i + 1) - peaks_list.get(i)) * interval);
-                Log.e("peaksList i + 1", String.valueOf((peaks_list.get(i + 1))));
-                Log.e("peaksList i", String.valueOf((peaks_list.get(i))));
-                Log.e("有效rr间隔值", String.valueOf((peaks_list.get(i + 1) - peaks_list.get(i)) * interval));
+//                Log.e("peaksList i + 1", String.valueOf((peaks_list.get(i + 1))));
+//                Log.e("peaksList i", String.valueOf((peaks_list.get(i))));
+//                Log.e("有效rr间隔值", String.valueOf((peaks_list.get(i + 1) - peaks_list.get(i)) * interval));
 
             }
             rrList.add((peaks_list.get(i + 1) - peaks_list.get(i)) * interval);
