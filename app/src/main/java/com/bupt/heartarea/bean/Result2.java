@@ -1,5 +1,6 @@
 package com.bupt.heartarea.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class Result2 {
     private int stat;
-    private List<NewsBean> data;
+    private List<NewsBean> data = new ArrayList<>();
 
     public List<NewsBean> getData() {
         return data;
