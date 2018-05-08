@@ -460,6 +460,7 @@ public class MainPageFragment extends Fragment implements OnClickListener {
 //        mQueue.add(stringRequest);
 
 
+        if (GlobalData.result.getData() != null)
         newsBeanList = new ArrayList<>(GlobalData.result.getData());
         for (int i = 0; i < newsBeanList.size(); i++) {
 

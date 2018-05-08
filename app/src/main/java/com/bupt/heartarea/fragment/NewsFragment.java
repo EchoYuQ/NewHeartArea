@@ -18,7 +18,6 @@ import com.android.volley.RequestQueue;
 import com.bupt.heartarea.R;
 import com.bupt.heartarea.activity.WebActivity;
 import com.bupt.heartarea.adapter.NewsRecyclerViewAdapter;
-import com.bupt.heartarea.bean.Result;
 import com.bupt.heartarea.bean.Result2;
 import com.bupt.heartarea.utils.GlobalData;
 
@@ -99,6 +98,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if (fresh != null) {
             fresh.setRefreshing(false);
         }
+        if (GlobalData.result.getData() != null)
         newsBeanList = GlobalData.result.getData();
         for (int i = 0; i < newsBeanList.size(); i++) {
 

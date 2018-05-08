@@ -11,7 +11,6 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bupt.heartarea.bean.Result;
 import com.bupt.heartarea.bean.Result2;
 import com.bupt.heartarea.utils.Constants;
 import com.bupt.heartarea.utils.GlobalData;
@@ -51,6 +50,8 @@ public class HeartAreaApplication extends Application {
                             }
 
                         } catch (JSONException e) {
+                            Log.e("HeartAreaApplication",e.toString());
+
                             e.printStackTrace();
                         }
                     }
