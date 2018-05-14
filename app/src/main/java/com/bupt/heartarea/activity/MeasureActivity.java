@@ -143,7 +143,7 @@ public class MeasureActivity extends Activity {
     private static final int AXISXMAX = 6000 / INTERVAL;
 
     // 采集多少个数据停止
-    private static final int STOP_COUNT = (int) (((float) AXISXMAX) * 4f);//   正式为3
+    private static final int STOP_COUNT = (int) (((float) AXISXMAX) * 6f);//   正式为3
     // 圆形进度条总的数值
     private static final int PROGRESS_STOP_COUNT = STOP_COUNT - 10; //
 

@@ -1,5 +1,7 @@
 package com.bupt.heartarea.utils;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,7 +163,7 @@ public class CalHeartRate {
                 peaksAgain.add(index);
                 count++;
 //                Log.e("index", String.valueOf(index));
-//                Log.e("count", String.valueOf(count));
+                Log.e("count", String.valueOf(count));
             }
         }
         return peaksAgain;
