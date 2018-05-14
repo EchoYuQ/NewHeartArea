@@ -11,13 +11,44 @@
         android:orientation="vertical">
 
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvFatigueTitle"
+                android:layout_centerInParent="true"
+                android:text="疲劳度"
+                android:textColor="@color/text_green"
+                android:textSize="18sp" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/ivFatigueTip"
+                android:layout_toRightOf="@id/tvFatigueTitle"
+                android:src="@drawable/question"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
         <com.bupt.heartarea.ui.CircleIndicator
             android:id="@+id/ci_1"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="40dp" />
+            android:layout_gravity="center_horizontal"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFatigueTip"
+            android:layout_centerInParent="true"
+            android:text="@string/fatigue_tip"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/text_black"
+            android:textSize="18sp"
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -55,14 +86,28 @@
                 android:textSize="24sp" />
         </LinearLayout>
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="心率值"
-            android:textColor="@color/text_green"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvHeartRateTitle"
+                android:layout_centerInParent="true"
+                android:text="心率值"
+                android:textColor="@color/text_green"
+                android:textSize="18sp" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/ivHeartRateTip"
+                android:layout_toRightOf="@id/tvHeartRateTitle"
+                android:src="@drawable/question"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
 
         <com.bupt.heartarea.ui.LineIndicator
             android:id="@+id/li_progress_heart_rate"
@@ -71,15 +116,40 @@
 
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/tvHeartRateTip"
+            android:layout_centerInParent="true"
+            android:text="@string/heartrate_tip"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/text_black"
+            android:textSize="18sp"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="血氧值"
-            android:textColor="@color/text_green"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvBloodOxyTitle"
+                android:layout_centerInParent="true"
+                android:text="血氧值"
+                android:textColor="@color/text_green"
+                android:textSize="18sp" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/ivBloodOxyTip"
+                android:layout_toRightOf="@id/tvBloodOxyTitle"
+                android:layout_centerVertical="true"
+                android:src="@drawable/question"
+                />
+        </RelativeLayout>
 
         <com.bupt.heartarea.ui.LineIndicator
             android:id="@+id/li_progress_blood_oxygen"
@@ -87,15 +157,40 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/tvBloodOxyTip"
+            android:layout_centerInParent="true"
+            android:text="@string/blood_oxy_tip"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/text_black"
+            android:textSize="18sp"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="房颤风险"
-            android:textColor="@color/text_green"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAfTitle"
+                android:layout_centerInParent="true"
+                android:text="房颤指数"
+                android:textColor="@color/text_green"
+                android:textSize="18sp" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/ivAfTip"
+                android:layout_toRightOf="@id/tvAfTitle"
+                android:layout_centerVertical="true"
+                android:src="@drawable/question"
+                />
+        </RelativeLayout>
 
         <com.bupt.heartarea.ui.LineIndicator
             android:id="@+id/li_progress_af"
@@ -105,6 +200,17 @@
             android:layout_marginRight="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvAfTip"
+            android:layout_centerInParent="true"
+            android:text="@string/af_tip"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/text_black"
+            android:textSize="18sp"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/ll_result_feedback_all"
