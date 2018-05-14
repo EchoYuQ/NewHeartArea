@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,6 +38,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class ResultActivity extends Activity implements View.OnClickListener {
 
     CircleIndicator ci1;
@@ -45,6 +50,18 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     LineIndicator mLiAfProgress;
     NumberAnimTextView mAnimTvBloodPressureHigh;
     NumberAnimTextView mAnimTvBloodPressureLow;
+
+    @BindView(R.id.tvHeartRateTip)
+    TextView mTvHeartRateTip;
+
+    @BindView(R.id.tvAfTip)
+    TextView mTvAfTip;
+
+    @BindView(R.id.tvBloodOxyTip)
+    TextView mTvBloodOxyTip;
+
+    @BindView(R.id.tvFatigueTip)
+    TextView mTvFatigueTip;
 
     private static final String TAG = "ResultActivity";
 
@@ -71,7 +88,7 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cicle_view);
-
+        ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
         mHeartRate = bundle.getInt("heart_rate");
@@ -80,7 +97,7 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         mBloodPressureHigh = bundle.getInt("blood_pressure_high");
         mBloodPressureLow = bundle.getInt("blood_pressure_low");
         mAf = bundle.getDouble("af");
-        Log.d(TAG + "af",mAf+"");
+        Log.d(TAG + "af", mAf + "");
         mAlert = bundle.getString("alert");
 
         initColor();
@@ -176,6 +193,7 @@ public class ResultActivity extends Activity implements View.OnClickListener {
      * @param value
      */
     private void setAfProgress(double value) {
+        /*
         String leftAlert = "低";
         String leftContent = "0";
         String rightAlert = "高";
@@ -196,6 +214,30 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         }
         mLiAfProgress.setContent(leftAlert, leftContent, rightAlert, rightContent);
         mLiAfProgress.setIndicator(-20, 120, (float) value, value + " %");
+        */
+        int afValue = (int) value;
+        String alert ;
+        String leftAlert = "低";
+        String rightAlert = "高";
+        if (afValue >= 2) {
+            mLiAfProgress.setProgressColor(mHighColor);
+            mLiAfProgress.setIndicatorBackground(mHighColor);
+            alert = "高风险";
+            afValue = 2;
+        } else {
+            if (afValue == 1) {
+                mLiAfProgress.setProgressColor(mMiddleColor);
+                mLiAfProgress.setIndicatorBackground(mMiddleColor);
+                alert = "中风险";
+            } else {
+                mLiAfProgress.setProgressColor(mLowColor);
+                mLiAfProgress.setIndicatorBackground(mLowColor);
+                alert = "低风险";
+            }
+        }
+        mLiAfProgress.setContent(leftAlert, "", rightAlert, "");
+        mLiAfProgress.setIndicator(-1, 3, afValue, alert);
+
     }
 
     /**
@@ -322,6 +364,7 @@ public class ResultActivity extends Activity implements View.OnClickListener {
                 .show();
     }
 
+    @OnClick({R.id.ivHeartRateTip, R.id.ivBloodOxyTip, R.id.ivAfTip, R.id.ivFatigueTip})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -332,7 +375,41 @@ public class ResultActivity extends Activity implements View.OnClickListener {
             case R.id.btn_result_no:
                 showRadioButtonDialog();
                 break;
+            case R.id.ivHeartRateTip:
+                if (mTvHeartRateTip.getVisibility() == View.GONE) {
+                    mTvHeartRateTip.setVisibility(View.VISIBLE);
+                } else {
+                    mTvHeartRateTip.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.ivBloodOxyTip:
+                if (mTvBloodOxyTip.getVisibility() == View.GONE) {
+                    mTvBloodOxyTip.setVisibility(View.VISIBLE);
+                } else {
+                    mTvBloodOxyTip.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.ivAfTip:
+                if (mTvAfTip.getVisibility() == View.GONE) {
+                    mTvAfTip.setVisibility(View.VISIBLE);
+                } else {
+                    mTvAfTip.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.ivFatigueTip:
+                if (mTvFatigueTip.getVisibility() == View.GONE) {
+                    mTvFatigueTip.setVisibility(View.VISIBLE);
+                } else {
+                    mTvFatigueTip.setVisibility(View.GONE);
+                }
+                break;
         }
+    }
+
+    private void setAllTipGone() {
+        mTvAfTip.setVisibility(View.GONE);
+        mTvBloodOxyTip.setVisibility(View.GONE);
+        mTvHeartRateTip.setVisibility(View.GONE);
     }
 
     /**
