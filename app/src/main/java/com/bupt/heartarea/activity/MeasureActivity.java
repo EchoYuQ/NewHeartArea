@@ -152,6 +152,7 @@ public class MeasureActivity extends Activity {
     private List<Double> mRedDatas = new ArrayList<Double>();
     private List<Double> mGreenDatas = new ArrayList<Double>();
     private List<Double> mBlueDatas = new ArrayList<Double>();
+    private List<Integer> mPeaksListAgain = new ArrayList<>();
     private int count;
     private double currentYtop = AXISYMAX;
     private double currentYbottom = AXISYMIN;
@@ -261,29 +262,18 @@ public class MeasureActivity extends Activity {
         double[] realtime_data_smoothed_array = new double[realtime_data_smoothed_list.size()];
         for (int i = 0; i < realtime_data_smoothed_list.size(); i++)
             realtime_data_smoothed_array[i] = realtime_data_smoothed_list.get(i);
-        System.out.println("实时心率去噪数据");
-        System.out.println(realtime_data_smoothed_list);
         // peaksList为峰的横坐标列表
         List<Integer> peaksList = CalHeartRate.findPeaksRealTime(realtime_data_smoothed_list);
         List<Integer> rr = CalHeartRate.calRRInteval(peaksList, INTERVAL);
+//        System.out.println("初始" + rr);
+        List<Integer> removalList = CalHeartRate.removalRRList(rr);
+//        System.out.println("去除异常点" + removalList);
         // 二次寻峰
-        List<Integer> peaksListAgain = CalHeartRate.findPeaksAgain(rr, INTERVAL);
-        System.out.println("实时心率RR间隔");
-        System.out.println(rr);
-        // 判断寻峰时 峰与峰之间的间隔，如果超过了阈值范围，证明寻峰发生错误，重测
-//        if (rr != null && rr.size() > 0) {
-//            int n = rr.size();
-//            int time0 = rr.get(0);
-//            int time = rr.get(n - 1);
-//            if (time0 < 500 || time0 > 1400) return false;
-//            if (time < 500 || time > 1400) return false;
-//        }
+        List<Integer> peaksListAgain = CalHeartRate.findPeaksAgain(removalList, INTERVAL);
+        mPeaksListAgain = CalHeartRate.calRRInteval(peaksListAgain, INTERVAL);
+//        System.out.println("二次寻锋后" + mPeaksListAgain);
         mRealTimeHeartRate = CalHeartRate.calHeartRate(peaksListAgain, INTERVAL);
-        Log.i("real time heartRate", mRealTimeHeartRate + "");
-
-//        int[] bloodpressure = BloodPressure.calBloodPressure(realtime_data_origin_copy_array);
-//        mRealTimeBloodPressureHigh = bloodpressure[0];
-//        mRealTimeBloodPressureLow = bloodpressure[1];
+//        Log.i("real time heartRate", mRealTimeHeartRate + "");
         return true;
     }
 
@@ -505,7 +495,7 @@ public class MeasureActivity extends Activity {
                 if (count == 10) {
                     mIsSuccess = true;
                     mIsHeartRateCanSet = true;
-                    mRealTimeHeartRate = mHeartRate;
+//                    mRealTimeHeartRate = mHeartRate;
                 }
                 if (mIsHeartRateCanSet) {
                     m_TvLabel.setText(mRealTimeHeartRate + "");
@@ -638,10 +628,9 @@ public class MeasureActivity extends Activity {
                     //                    System.out.println(data_smoothed_list);
                     // peaksList为峰的横坐标列表
                     List<Integer> peaksList = CalHeartRate.findPeaks(data_smoothed_list);
-                    mHeartRate = CalHeartRate.calHeartRate(peaksList, INTERVAL);
-                    userDataBean.setHeartrate(mHeartRate);
-                    Log.i("heart rate", mHeartRate + "");
-                    m_TvLabel.setText(mHeartRate + "");
+                    userDataBean.setHeartrate(mRealTimeHeartRate);
+//                    Log.i("heart rate", mHeartRate + "");
+                    m_TvLabel.setText(mRealTimeHeartRate + "");
 //                    Toast.makeText(MeasureActivity.this, "心率为" + mHeartRate, Toast.LENGTH_LONG).show();
 
                     mBloodOxygen = (int) CalBloodOxygen.SpO2(userDataBean.getRed_datas(), userDataBean.getBlue_datas());
@@ -655,9 +644,10 @@ public class MeasureActivity extends Activity {
                     userDataBean.setDatas(data_origin_list2);
                     //                    Intent intent = new Intent(MeasureActivity.this, SaveDataActivity.class);
                     // 上传给server端的数据
-                    mMeasureData.setHeart_rate(mHeartRate);
+                    mMeasureData.setHeart_rate(mRealTimeHeartRate);
                     mMeasureData.setBlood_oxygen(mBloodOxygen);
-                    mMeasureData.setRr_interval(CalHeartRate.calRRInteval(peaksList, INTERVAL));
+                    mMeasureData.setRr_interval(mPeaksListAgain);
+                    // mPeaksListAgain
                     // List<Double>转成List<Float> 并保留4位小数
                     DecimalFormat df = new DecimalFormat("#0.0000");
                     List<Float> float_list = new ArrayList<>();
@@ -908,10 +898,11 @@ public class MeasureActivity extends Activity {
                     public void onResponse(String response) {
                         Log.d("MeasureActivity", "response -> " + response);
 //                        Toast.makeText(context, response, Toast.LENGTH_LONG).show();
-
+                        System.out.println("回调结果response" + response);
                         Gson gson = new Gson();
                         ResponseBean responseBean = gson.fromJson(response, ResponseBean.class);
                         // TODO: 2017/3/20 加一个GlobalData
+                        System.out.println("回调结果" + responseBean);
                         if (responseBean != null) {
                             if (responseBean.getCode() == 0) {
 
@@ -942,7 +933,7 @@ public class MeasureActivity extends Activity {
                                 bundle.putInt("pressure", pressure);
                                 bundle.putString("ad", ad);
                                 bundle.putString("alert", alert);
-                                bundle.putInt("heart_rate", mHeartRate);
+                                bundle.putInt("heart_rate", mRealTimeHeartRate);
                                 bundle.putInt("blood_oxygen", mBloodOxygen);
                                 bundle.putInt("blood_pressure_high", mBloodPressureHigh);
                                 bundle.putInt("blood_pressure_low", mBloodPressureLow);
@@ -957,7 +948,7 @@ public class MeasureActivity extends Activity {
                             bundle.putInt("pressure", 0);
                             bundle.putString("ad", "");
                             bundle.putString("alert", "");
-                            bundle.putInt("heart_rate", mHeartRate);
+                            bundle.putInt("heart_rate", mRealTimeHeartRate);
                             bundle.putInt("blood_oxygen", mBloodOxygen);
                             bundle.putInt("blood_pressure_high", mBloodPressureHigh);
                             bundle.putInt("blood_pressure_low", mBloodPressureLow);
@@ -965,8 +956,6 @@ public class MeasureActivity extends Activity {
                             startActivity(intent);
                             finish();
                         }
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -976,6 +965,7 @@ public class MeasureActivity extends Activity {
         }) {
             @Override
             protected Map<String, String> getParams() {
+//                System.out.println("TimeUtil.getCurrentDate()" + TimeUtil.getCurrentDate());
                 //在这里设置需要post的参数
                 Map<String, String> map = new HashMap<>();
                 Gson gson = new Gson();

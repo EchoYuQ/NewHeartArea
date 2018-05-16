@@ -1,7 +1,6 @@
 package com.bupt.heartarea.utils;
 
 import com.bupt.heartarea.bean.HistoryDataItemBean;
-import com.bupt.heartarea.bean.Result;
 import com.bupt.heartarea.bean.Result2;
 
 import java.util.ArrayList;
