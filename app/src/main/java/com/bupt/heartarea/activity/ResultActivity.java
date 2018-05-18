@@ -2,6 +2,7 @@ package com.bupt.heartarea.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,6 +31,9 @@ import com.bupt.heartarea.ui.LineIndicator;
 import com.bupt.heartarea.ui.NumberAnimTextView;
 import com.bupt.heartarea.utils.GlobalData;
 import com.google.gson.Gson;
+import com.zhouyou.view.segmentedbar.RectThumbSegmentedBarView;
+import com.zhouyou.view.segmentedbar.Segment;
+import com.zhouyou.view.segmentedbar.SegmentedBarView;
 
 import net.lemonsoft.lemonbubble.LemonBubble;
 
@@ -47,7 +51,6 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     CircleIndicator ci1;
     LineIndicator mLiHeartRateProgress;
     LineIndicator mLiBloodOxygenProgress;
-    LineIndicator mLiAfProgress;
     NumberAnimTextView mAnimTvBloodPressureHigh;
     NumberAnimTextView mAnimTvBloodPressureLow;
 
@@ -62,6 +65,10 @@ public class ResultActivity extends Activity implements View.OnClickListener {
 
     @BindView(R.id.tvFatigueTip)
     TextView mTvFatigueTip;
+
+    @BindView(R.id.rtsbv_af)
+    RectThumbSegmentedBarView mSbvAf;
+
 
     private static final String TAG = "ResultActivity";
 
@@ -105,13 +112,12 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         initIndicator();
         setHeartRateProgress(mHeartRate);
         setBloodOxygenProgress(mBloodOxygen);
-        setAfProgress(mAf);
+        initAfSegmentBarView(mAf);
     }
 
     private void initView() {
         mLiHeartRateProgress = (LineIndicator) findViewById(R.id.li_progress_heart_rate);
         mLiBloodOxygenProgress = (LineIndicator) findViewById(R.id.li_progress_blood_oxygen);
-        mLiAfProgress = (LineIndicator) findViewById(R.id.li_progress_af);
         ci1 = (CircleIndicator) findViewById(R.id.ci_1);
 
         mBtnFeedBackYes = (Button) findViewById(R.id.btn_result_yes);
@@ -187,58 +193,6 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         mLiBloodOxygenProgress.setIndicator(90, 100, value, value + " %");
     }
 
-    /**
-     * 绘制 房颤风险 进度条
-     *
-     * @param value
-     */
-    private void setAfProgress(double value) {
-        /*
-        String leftAlert = "低";
-        String leftContent = "0";
-        String rightAlert = "高";
-        String rightContent = "100";
-        if (value > 70) {
-            mLiAfProgress.setProgressColor(mHighColor);
-            mLiAfProgress.setIndicatorBackground(mHighColor);
-        } else {
-            if (value > 30) {
-                mLiAfProgress.setProgressColor(mMiddleColor);
-                mLiAfProgress.setIndicatorBackground(mMiddleColor);
-
-            } else {
-                mLiAfProgress.setProgressColor(mLowColor);
-                mLiAfProgress.setIndicatorBackground(mLowColor);
-
-            }
-        }
-        mLiAfProgress.setContent(leftAlert, leftContent, rightAlert, rightContent);
-        mLiAfProgress.setIndicator(-20, 120, (float) value, value + " %");
-        */
-        int afValue = (int) value;
-        String alert ;
-        String leftAlert = "低";
-        String rightAlert = "高";
-        if (afValue >= 2) {
-            mLiAfProgress.setProgressColor(mHighColor);
-            mLiAfProgress.setIndicatorBackground(mHighColor);
-            alert = "高风险";
-            afValue = 2;
-        } else {
-            if (afValue == 1) {
-                mLiAfProgress.setProgressColor(mMiddleColor);
-                mLiAfProgress.setIndicatorBackground(mMiddleColor);
-                alert = "中风险";
-            } else {
-                mLiAfProgress.setProgressColor(mLowColor);
-                mLiAfProgress.setIndicatorBackground(mLowColor);
-                alert = "低风险";
-            }
-        }
-        mLiAfProgress.setContent(leftAlert, "", rightAlert, "");
-        mLiAfProgress.setIndicator(-1, 3, afValue, alert);
-
-    }
 
     /**
      * 疲劳度仪表盘
@@ -288,6 +242,26 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         }
         ci1.setContent(title, content, unit, mAlert);
         ci1.setIndicatorValue(dividerIndicator, mFatigue);
+    }
+
+    /**
+     * 房颤结果控件
+     */
+    private void initAfSegmentBarView(double value) {
+        int afValue = (int) value;
+        if (afValue >= 2) {
+            afValue = 2;
+        }
+        ArrayList<Segment> segments = new ArrayList<>();
+        Segment segment = new Segment("", "低风险", getResources().getColor(R.color.normal_green));
+        segments.add(segment);
+        Segment segment2 = new Segment("", "中风险", getResources().getColor(R.color.normal_yellow));
+        segments.add(segment2);
+        Segment segment3 = new Segment("", "高风险", getResources().getColor(R.color.normal_red));
+        segments.add(segment3);
+        mSbvAf.setValueSegment(afValue);
+        mSbvAf.setShowDescriptionText(true);
+        mSbvAf.setSegments(segments);
     }
 
     /**
