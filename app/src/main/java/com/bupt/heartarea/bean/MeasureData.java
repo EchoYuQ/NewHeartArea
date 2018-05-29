@@ -12,6 +12,7 @@ public class MeasureData implements Serializable {
     private int blood_oxygen = -1;
     private int blood_pressure_high = -1;
     private int blood_pressure_low = -1;
+    private int current_status = -1;
     private List<Integer> rr_interval = new ArrayList<>();
     private List<Float> data = new ArrayList<>();
 
@@ -62,5 +63,13 @@ public class MeasureData implements Serializable {
 
     public void setBlood_pressure_low(int blood_pressure_low) {
         this.blood_pressure_low = blood_pressure_low;
+    }
+
+    public int getCurrent_status() {
+        return current_status;
+    }
+
+    public void setCurrent_status(int current_status) {
+        this.current_status = current_status;
     }
 }
