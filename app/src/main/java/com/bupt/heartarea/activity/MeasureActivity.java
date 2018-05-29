@@ -647,6 +647,7 @@ public class MeasureActivity extends Activity {
                     mMeasureData.setHeart_rate(mRealTimeHeartRate);
                     mMeasureData.setBlood_oxygen(mBloodOxygen);
                     mMeasureData.setRr_interval(mPeaksListAgain);
+                    mMeasureData.setCurrent_status(GlobalData.measure_state);
                     // mPeaksListAgain
                     // List<Double>转成List<Float> 并保留4位小数
                     DecimalFormat df = new DecimalFormat("#0.0000");
