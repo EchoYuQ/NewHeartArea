@@ -3,18 +3,14 @@ package com.bupt.heartarea.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bupt.heartarea.R;
-import com.bupt.heartarea.activity.MainActivity;
 import com.bupt.heartarea.activity.MeasureActivity;
 import com.bupt.heartarea.ui.RippleImageView;
 import com.bupt.heartarea.utils.GlobalData;
@@ -65,7 +61,7 @@ public class MeasureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 LemonHello.getInformationHello("选择当前状态", "请选择您当前的状态")
-                        .addAction(new LemonHelloAction("静息状态", Color.parseColor("#a269af73"), new LemonHelloActionDelegate() {
+                        .addAction(new LemonHelloAction("心衰患者", Color.parseColor("#a269af73"), new LemonHelloActionDelegate() {
                             @Override
                             public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
                                 GlobalData.measure_state = 0;
@@ -74,7 +70,7 @@ public class MeasureFragment extends Fragment {
                                 startActivity(intent);
                             }
                         }))
-                        .addAction(new LemonHelloAction("运动过后", Color.parseColor("#FFF96650"), new LemonHelloActionDelegate() {
+                        .addAction(new LemonHelloAction("房颤患者", Color.parseColor("#FFF96650"), new LemonHelloActionDelegate() {
                             @Override
                             public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
                                 GlobalData.measure_state = 1;
