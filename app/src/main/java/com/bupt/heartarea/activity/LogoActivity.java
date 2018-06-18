@@ -33,7 +33,7 @@ public class LogoActivity extends Activity {
     private boolean mIsLoginSuccess = true;
 
     //    private static final String URL_LOGIN = "http://101.200.89.170:9000/capp/login/normal";
-    private static final String URL_LOGIN = GlobalData.URL_HEAD + ":8080/detect3/LoginServlet";
+    private static final String URL_LOGIN = GlobalData.URL_HEAD + "/detect3/LoginServlet";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

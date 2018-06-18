@@ -38,8 +38,8 @@ public class ResetPwdActivity extends Activity {
     private String mPassword;
 
 
-    private static final String URL_RESETPWD = GlobalData.URL_HEAD + ":8080/detect3/FindPasswordServlet";
-    private static final String URL_RESETPWD_VERCODE = GlobalData.URL_HEAD + ":8080/detect3/VercodeForFindServlet";
+    private static final String URL_RESETPWD = GlobalData.URL_HEAD + "/detect3/FindPasswordServlet";
+    private static final String URL_RESETPWD_VERCODE = GlobalData.URL_HEAD + "/detect3/VercodeForFindServlet";
     private TimeCount mTimeCount;
 
     @Override

@@ -49,7 +49,7 @@ import java.util.Map;
  */
 public class HistoryActivity extends Activity implements View.OnClickListener {
     // 端口号为8080
-    private static final String URL_HISTORY = GlobalData.URL_HEAD + ":8080/detect3/HistoryServlet";
+    private static final String URL_HISTORY = GlobalData.URL_HEAD + "/detect3/HistoryServlet";
     //    private static final String URL_HISTORY = GlobalData.URL_HEAD + ":8080/detect3/HistorySer";
     RadioGroup mRadioGroup;
     RadioButton mRbDay;

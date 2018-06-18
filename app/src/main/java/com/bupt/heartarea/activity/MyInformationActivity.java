@@ -93,9 +93,9 @@ public class MyInformationActivity extends Activity implements View.OnClickListe
 
     // 用户缓存
     private SharedPreferences preferences;
-    private static final String URL_CHANGE_INFORMATION = GlobalData.URL_HEAD + ":8080/detect3/ChangeServlet";
+    private static final String URL_CHANGE_INFORMATION = GlobalData.URL_HEAD + "/detect3/ChangeServlet";
     // 上传用户头像的url
-    private static final String URL_IMAGE_HEAD = GlobalData.URL_HEAD + ":8080/detect3/HeadIconServlet";
+    private static final String URL_IMAGE_HEAD = GlobalData.URL_HEAD + "/detect3/HeadIconServlet";
     private static final String URL_BASE = "http://47.92.80.155:8080/";
 
     @Override

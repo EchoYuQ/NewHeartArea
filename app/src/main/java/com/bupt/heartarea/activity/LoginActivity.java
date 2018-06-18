@@ -43,7 +43,7 @@ public class LoginActivity extends Activity {
     private String str_json;
 
     // 对端口号和URI的定义
-    private static final String URL_LOGIN = GlobalData.URL_HEAD + ":8080/detect3/LoginServlet";
+    private static final String URL_LOGIN = GlobalData.URL_HEAD + "/detect3/LoginServlet";
 
     private static final String URL_HEAD_IMAGE = "http://img04.tooopen.com/images/20130701/tooopen_10055061.jpg";
     // 用户头像的url

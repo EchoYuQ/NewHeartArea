@@ -68,7 +68,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author yuqing
  */
 public class MeasureActivity extends Activity {
-    private static final String URL_MEASURE = GlobalData.URL_HEAD + ":8080/detect3/TransServlet";
+    private static final String URL_MEASURE = GlobalData.URL_HEAD + "/detect3/TransServlet";
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
     //曲线
     private Timer timer;

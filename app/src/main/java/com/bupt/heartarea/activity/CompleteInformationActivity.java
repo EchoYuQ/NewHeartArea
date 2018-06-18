@@ -60,7 +60,7 @@ public class CompleteInformationActivity extends Activity implements View.OnClic
 
     // 用户缓存
     private SharedPreferences preferences;
-    private static final String URL_CHANGE_INFORMATION = GlobalData.URL_HEAD + ":8080/detect3/ChangeServlet";
+    private static final String URL_CHANGE_INFORMATION = GlobalData.URL_HEAD + "/detect3/ChangeServlet";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

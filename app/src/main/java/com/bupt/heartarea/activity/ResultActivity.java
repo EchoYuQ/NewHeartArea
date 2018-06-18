@@ -89,7 +89,7 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     Button mBtnFeedBackYes;
     Button mBtnFeedBackNo;
     LinearLayout mLlFeedBackAll;
-    private static final String URL_FEEDBACK = GlobalData.URL_HEAD + ":8080/detect3/SelfstatusServlet";
+    private static final String URL_FEEDBACK = GlobalData.URL_HEAD + "/detect3/SelfstatusServlet";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

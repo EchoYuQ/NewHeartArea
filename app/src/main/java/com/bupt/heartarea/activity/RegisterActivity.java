@@ -43,8 +43,8 @@ public class RegisterActivity extends Activity {
     private TimeCount mTimeCount;
 
 
-    private static final String URL_REGISTER = GlobalData.URL_HEAD + ":8080/detect3/RegServlet";
-    private static final String URL_REGISTER_VERCODE = GlobalData.URL_HEAD + ":8080/detect3/GetVercodeServlet";
+    private static final String URL_REGISTER = GlobalData.URL_HEAD + "/detect3/RegServlet";
+    private static final String URL_REGISTER_VERCODE = GlobalData.URL_HEAD + "/detect3/GetVercodeServlet";
 
     private String mTel;
 

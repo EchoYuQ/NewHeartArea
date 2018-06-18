@@ -65,8 +65,8 @@ import cn.aigestudio.datepicker.views.DatePicker2;
 
 
 public class MainPageFragment extends Fragment implements OnClickListener {
-    private static final String URL_GETSIGNEDDATE = GlobalData.URL_HEAD + ":8080/detect3/SignInMonth";
-    private static final String URL_POSTSIGNEDDATE = GlobalData.URL_HEAD + ":8080/detect3/SignIn";
+    private static final String URL_GETSIGNEDDATE = GlobalData.URL_HEAD + "/detect3/SignInMonth";
+    private static final String URL_POSTSIGNEDDATE = GlobalData.URL_HEAD + "/detect3/SignIn";
     private View view;
     // 广告
     private ViewPager viewPager;

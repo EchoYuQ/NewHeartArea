@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class SaveDataActivity extends Activity implements View.OnClickListener {
 
-    private static final String URL_COLLECT_DATA = GlobalData.URL_HEAD + ":8080/detect3/CollectServlet";
+    private static final String URL_COLLECT_DATA = GlobalData.URL_HEAD + "/detect3/CollectServlet";
     private EditText et_mUserName;
     private EditText et_mAge;
     private RadioGroup rg_mSex;
