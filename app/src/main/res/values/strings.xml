@@ -18,4 +18,5 @@
     <string name="blood_oxy_tip" formatted="false">血氧饱和度(SpO2)是血液中被氧结合的氧合血红蛋白(HbO2)的容量占全部可结合的血红蛋白(Hb，hemoglobin)容量的百分比，即血液中血氧的浓度。一般认为血氧饱和度不应低于94%，低于90%时即为低氧，需进行观察治疗。
 </string>
     <string name="af_tip" formatted="false">心房颤动是一种常见的快速心律失常，60岁以上的人有1%出现房颤，随着年龄增长发生率成倍增加。其中无器质性心脏病患者占3%-11%。若风险显示为高，应尽快前往医院进行专业检查。</string>
+    <string name="title_activity_questionnaire_survey">questionnaireSurvey</string>
 </resources>

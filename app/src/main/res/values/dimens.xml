@@ -58,4 +58,5 @@
     <!-- LineIndicator -->
     <dimen name="line_alert_size">12sp</dimen>
     <dimen name="line_indicator_text_size">14sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

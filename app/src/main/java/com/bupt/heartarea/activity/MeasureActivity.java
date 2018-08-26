@@ -939,6 +939,7 @@ public class MeasureActivity extends Activity {
                                 bundle.putInt("blood_pressure_high", mBloodPressureHigh);
                                 bundle.putInt("blood_pressure_low", mBloodPressureLow);
                                 bundle.putDouble("af", mAf);
+                                bundle.putSerializable("measure_data", mMeasureData);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 finish();
@@ -953,6 +954,7 @@ public class MeasureActivity extends Activity {
                             bundle.putInt("blood_oxygen", mBloodOxygen);
                             bundle.putInt("blood_pressure_high", mBloodPressureHigh);
                             bundle.putInt("blood_pressure_low", mBloodPressureLow);
+                            bundle.putSerializable("measure_data", mMeasureData);
                             intent.putExtras(bundle);
                             startActivity(intent);
                             finish();

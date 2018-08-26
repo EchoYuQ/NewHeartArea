@@ -61,7 +61,7 @@ public class MeasureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 LemonHello.getInformationHello("选择当前状态", "请选择您当前的状态")
-                        .addAction(new LemonHelloAction("心衰患者", Color.parseColor("#a269af73"), new LemonHelloActionDelegate() {
+                        .addAction(new LemonHelloAction("静息状态", Color.parseColor("#a269af73"), new LemonHelloActionDelegate() {
                             @Override
                             public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
                                 GlobalData.measure_state = 0;
@@ -70,7 +70,7 @@ public class MeasureFragment extends Fragment {
                                 startActivity(intent);
                             }
                         }))
-                        .addAction(new LemonHelloAction("房颤患者", Color.parseColor("#FFF96650"), new LemonHelloActionDelegate() {
+                        .addAction(new LemonHelloAction("运动状态", Color.parseColor("#FFF96650"), new LemonHelloActionDelegate() {
                             @Override
                             public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
                                 GlobalData.measure_state = 1;

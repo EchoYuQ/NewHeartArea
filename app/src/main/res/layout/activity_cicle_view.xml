@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-
+        
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,6 +33,15 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/tvFatigueTitle"
                 android:src="@drawable/question" />
+
+            <ImageView
+                android:id="@+id/ivCamera"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/camera"/>
+
         </RelativeLayout>
 
         <com.bupt.heartarea.ui.CircleIndicator

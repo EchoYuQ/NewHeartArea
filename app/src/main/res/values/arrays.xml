@@ -8,6 +8,13 @@
         <item>特别疲劳</item>
     </string-array>
 
+    <string-array name="disease_array">
+        <item>没有</item>
+        <item>心衰</item>
+        <item>房颤</item>
+        <item>不知道</item>
+    </string-array>
+
     <string-array name="diet_array">
         <item>清淡</item>
         <item>均衡</item>

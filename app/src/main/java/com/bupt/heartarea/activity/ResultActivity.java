@@ -2,8 +2,8 @@ package com.bupt.heartarea.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -33,7 +34,6 @@ import com.bupt.heartarea.utils.GlobalData;
 import com.google.gson.Gson;
 import com.zhouyou.view.segmentedbar.RectThumbSegmentedBarView;
 import com.zhouyou.view.segmentedbar.Segment;
-import com.zhouyou.view.segmentedbar.SegmentedBarView;
 
 import net.lemonsoft.lemonbubble.LemonBubble;
 
@@ -53,7 +53,7 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     LineIndicator mLiBloodOxygenProgress;
     NumberAnimTextView mAnimTvBloodPressureHigh;
     NumberAnimTextView mAnimTvBloodPressureLow;
-
+    ImageView mCameraView;
     @BindView(R.id.tvHeartRateTip)
     TextView mTvHeartRateTip;
 
@@ -113,6 +113,17 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         setHeartRateProgress(mHeartRate);
         setBloodOxygenProgress(mBloodOxygen);
         initAfSegmentBarView(mAf);
+        mCameraView = (ImageView) findViewById(R.id.ivCamera);
+        mCameraView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ResultActivity.this,questionnaireSurveyActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("measure_data", getIntent().getSerializableExtra("measure_data"));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView() {
@@ -343,7 +354,6 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_result_yes:
-
                 feedBack(1, 0);
                 break;
             case R.id.btn_result_no:
