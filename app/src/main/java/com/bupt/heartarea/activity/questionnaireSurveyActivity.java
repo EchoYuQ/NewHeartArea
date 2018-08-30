@@ -21,9 +21,17 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bupt.heartarea.R;
 import com.bupt.heartarea.bean.MeasureData;
+import com.bupt.heartarea.bean.ResponseBean;
 import com.bupt.heartarea.utils.GlobalData;
 import com.bupt.heartarea.utils.TimeUtil;
 import com.google.gson.Gson;
+
+import net.lemonsoft.lemonhello.LemonHello;
+import net.lemonsoft.lemonhello.LemonHelloAction;
+import net.lemonsoft.lemonhello.LemonHelloInfo;
+import net.lemonsoft.lemonhello.LemonHelloView;
+import net.lemonsoft.lemonhello.adapter.LemonHelloEventDelegateAdapter;
+import net.lemonsoft.lemonhello.interfaces.LemonHelloActionDelegate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -170,7 +178,35 @@ public class questionnaireSurveyActivity extends Activity implements View.OnClic
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_COLLECT_DATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                System.out.println("response" + s);
+                Log.i("Response", s);
+                System.out.println(s);
+                Gson gson = new Gson();
+                ResponseBean responseBean = gson.fromJson(s, ResponseBean.class);
+                if (responseBean!=null&&responseBean.getCode() == 0) {
+                    LemonHello.getSuccessHello("上传成功", "感谢您对我们工作的支持，谢谢您的使用")
+                            .setContentFontSize(14)
+                            .addAction(new LemonHelloAction("我知道啦", new LemonHelloActionDelegate() {
+                                @Override
+                                public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+                                    helloView.hide();
+                                    finish();
+                                }
+                            }))
+                            .setEventDelegate(new LemonHelloEventDelegateAdapter() {
+                                @Override
+                                public void onMaskTouch(LemonHelloView helloView, LemonHelloInfo helloInfo) {
+                                    super.onMaskTouch(helloView, helloInfo);
+                                    helloView.hide();
+                                    finish();
+                                }
+                            })
+                            .show(questionnaireSurveyActivity.this);
+                } else if(responseBean!=null){
+                    Toast.makeText(questionnaireSurveyActivity.this, responseBean.getMsg(), Toast.LENGTH_LONG).show();
+                }else
+                {
+                    Toast.makeText(questionnaireSurveyActivity.this, "上传失败", Toast.LENGTH_LONG).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
