@@ -43,6 +43,8 @@ public class questionnaireSurveyActivity extends Activity implements View.OnClic
 
     private static final String URL_COLLECT_DATA = GlobalData.URL_HEAD + "/detect3/SHDataCollect";
     private EditText et_mUserName;
+    private EditText et_mHBP;
+    private EditText et_mLBP;
     private RadioGroup rg_mSex;
     private RadioButton rb_mMan;
     private RadioButton rb_mWoman;
@@ -52,6 +54,8 @@ public class questionnaireSurveyActivity extends Activity implements View.OnClic
     private Spinner mSpinnerDisease;
     private EditText mEtHeight, mEtWeight;
     private String mUserName = "";
+    private String mHBP = "";
+    private String mLBP = "";
     private MeasureData mMeasureData = new MeasureData();
     private int mHeight = -1;
     private int mWeight = -1;
@@ -79,6 +83,8 @@ public class questionnaireSurveyActivity extends Activity implements View.OnClic
         et_mUserName = (EditText) findViewById(R.id.id_et_usermame);
         mEtHeight = (EditText) findViewById(R.id.id_et_height);
         mEtWeight = (EditText) findViewById(R.id.id_et_weight);
+        et_mHBP = (EditText) findViewById(R.id.id_et_hbp);
+        et_mLBP = (EditText) findViewById(R.id.id_et_hbp);
         btn_mSaveDataBtn = (Button) findViewById(R.id.id_btn_savedata);
         btn_mSaveDataBtn.setOnClickListener(this);
 
@@ -110,6 +116,8 @@ public class questionnaireSurveyActivity extends Activity implements View.OnClic
         switch (v.getId()) {
             case R.id.id_btn_savedata:
                 mUserName = et_mUserName.getText().toString().trim();
+                mHBP = et_mHBP.getText().toString().trim();
+                mLBP = et_mLBP.getText().toString().trim();
                 switch (mSpinnerDisease.getSelectedItem().toString()){
                     case "没有":
                         mDisease = 0;
@@ -126,6 +134,16 @@ public class questionnaireSurveyActivity extends Activity implements View.OnClic
                 }
                 if (mUserName.equals("")) {
                     Toast.makeText(questionnaireSurveyActivity.this, "请输入您的姓名", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
+                if(mHBP.equals("")){
+                    Toast.makeText(questionnaireSurveyActivity.this,"请输入您的高压",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
+                if(mLBP.equals("")){
+                    Toast.makeText(questionnaireSurveyActivity.this,"请输入您的低压",Toast.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -229,6 +247,8 @@ public class questionnaireSurveyActivity extends Activity implements View.OnClic
                 map.put("sex", String.valueOf(mSex));
                 map.put("disease", String.valueOf(mDisease));
                 map.put("all_data", String.valueOf(mMeasureDataString));
+                map.put("HBP",mHBP);
+                map.put("LBP",mLBP);
                 Log.i("收集数据", map.toString());
                 return map;
             }

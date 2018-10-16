@@ -3,7 +3,6 @@ package com.bupt.heartarea.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,14 +19,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bupt.heartarea.R;
 import com.bupt.heartarea.bean.MeasureData;
 import com.bupt.heartarea.bean.ResponseBean;
 import com.bupt.heartarea.utils.GlobalData;
 import com.bupt.heartarea.utils.TimeUtil;
 import com.google.gson.Gson;
-import com.bupt.heartarea.R;
 
-import net.lemonsoft.lemonbubble.LemonBubble;
 import net.lemonsoft.lemonhello.LemonHello;
 import net.lemonsoft.lemonhello.LemonHelloAction;
 import net.lemonsoft.lemonhello.LemonHelloInfo;
@@ -261,15 +259,6 @@ public class SaveDataActivity extends Activity implements View.OnClickListener {
                 ResponseBean responseBean = gson.fromJson(s, ResponseBean.class);
                 if (responseBean!=null&&responseBean.getCode() == 0) {
                     saveUserInformationToSP();
-
-//                    System.out.println("上传成功");
-//                    Toast.makeText(SaveDataActivity.this, "上传成功", Toast.LENGTH_LONG).show();
-//                    LemonBubble.getRightBubbleInfo()// 增加无限点语法修改bubbleInfo的特性
-//                            .setTitle("上传成功")
-//                            .setTitleFontSize(12)// 修改字体大小
-//                            .setTitleColor(Color.parseColor("#a269af73"))
-//                            .setMaskColor(Color.argb(100, 0, 0, 0))// 修改蒙版颜色
-//                            .show(SaveDataActivity.this, 2000);
 
                     LemonHello.getSuccessHello("上传成功", "感谢您对我们工作的支持，谢谢您的使用")
                             .setContentFontSize(14)

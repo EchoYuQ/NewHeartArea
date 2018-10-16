@@ -54,6 +54,7 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     NumberAnimTextView mAnimTvBloodPressureHigh;
     NumberAnimTextView mAnimTvBloodPressureLow;
     ImageView mCameraView;
+    ImageView mQuestionView;
     @BindView(R.id.tvHeartRateTip)
     TextView mTvHeartRateTip;
 
@@ -91,6 +92,9 @@ public class ResultActivity extends Activity implements View.OnClickListener {
     LinearLayout mLlFeedBackAll;
     private static final String URL_FEEDBACK = GlobalData.URL_HEAD + "/detect3/SelfstatusServlet";
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,17 +117,6 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         setHeartRateProgress(mHeartRate);
         setBloodOxygenProgress(mBloodOxygen);
         initAfSegmentBarView(mAf);
-        mCameraView = (ImageView) findViewById(R.id.ivCamera);
-        mCameraView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this,questionnaireSurveyActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("measure_data", getIntent().getSerializableExtra("measure_data"));
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
     }
 
     private void initView() {
@@ -143,6 +136,9 @@ public class ResultActivity extends Activity implements View.OnClickListener {
         mAnimTvBloodPressureLow = (NumberAnimTextView) findViewById(R.id.animtv_blood_presssure_low);
         mAnimTvBloodPressureHigh.setNumberString(String.valueOf(mBloodPressureHigh));
         mAnimTvBloodPressureLow.setNumberString(String.valueOf(mBloodPressureLow));
+
+        mQuestionView = (ImageView) findViewById(R.id.ivQuestion);
+        mQuestionView.setOnClickListener(this);
 
     }
 
@@ -387,13 +383,14 @@ public class ResultActivity extends Activity implements View.OnClickListener {
                     mTvFatigueTip.setVisibility(View.GONE);
                 }
                 break;
+            case R.id.ivQuestion:
+                Intent intent = new Intent(ResultActivity.this,questionnaireSurveyActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("measure_data", getIntent().getSerializableExtra("measure_data"));
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
         }
-    }
-
-    private void setAllTipGone() {
-        mTvAfTip.setVisibility(View.GONE);
-        mTvBloodOxyTip.setVisibility(View.GONE);
-        mTvHeartRateTip.setVisibility(View.GONE);
     }
 
     /**
@@ -409,14 +406,10 @@ public class ResultActivity extends Activity implements View.OnClickListener {
                     @Override
                     public void onResponse(String s) {
                         Gson gson = new Gson();
-
                         ResponseBean responseBean = gson.fromJson(s, ResponseBean.class);
-
-
                         if (responseBean != null) {
                             if (responseBean.getCode() == 0) {
 //                                Toast.makeText(ResultActivity.this, responseBean.getMsg(), Toast.LENGTH_LONG).show();
-
                                 LemonBubble.getRightBubbleInfo()// 增加无限点语法修改bubbleInfo的特性
                                         .setTitle("提交成功")
                                         .setTitleFontSize(12)// 修改字体大小
@@ -424,12 +417,9 @@ public class ResultActivity extends Activity implements View.OnClickListener {
                                         .setMaskColor(Color.argb(100, 0, 0, 0))// 修改蒙版颜色
                                         .show(ResultActivity.this, 2000);
                                 mLlFeedBackAll.setVisibility(View.GONE);
-
-
                             } else {
                                 Toast.makeText(ResultActivity.this, responseBean.getMsg(), Toast.LENGTH_LONG).show();
                             }
-
                         } else {
                             Toast.makeText(ResultActivity.this, "解析失败", Toast.LENGTH_SHORT).show();
                         }
@@ -456,6 +446,5 @@ public class ResultActivity extends Activity implements View.OnClickListener {
             }
         };
         requestQueue.add(request);
-
     }
 }
